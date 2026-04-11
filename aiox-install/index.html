@@ -1976,13 +1976,21 @@
         <pre><code><span class="c-cmd">sudo apt-get update</span> && <span class="c-cmd">sudo apt-get install</span> <span class="c-flag">-y</span> unzip curl git</code></pre>
       </div>
 
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Instalação — 4 passos</h3>
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Instalação — passos comuns (todas as CLIs)</h3>
+
+      <div class="info-box critical" style="margin-bottom:16px;">
+        <i data-lucide="alert-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Cada CLI tem sua própria forma de integrar o CodeRabbit.</strong>
+          Os passos 1 e 2 (instalar CLI + autenticar) são iguais para todos. O passo 3 (integração com a CLI de IA) muda conforme o tool que você usa.
+        </div>
+      </div>
 
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <div class="step-title">Instalar o CLI</div>
+            <div class="step-title">Instalar o CLI do CodeRabbit <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
             <div class="code-block" style="margin-top:8px;">
               <div class="code-header">
                 <span class="code-lang">bash</span>
@@ -1995,7 +2003,7 @@
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <div class="step-title">Autenticar (uma vez por sessão)</div>
+            <div class="step-title">Autenticar <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
             <div class="code-block" style="margin-top:8px;">
               <div class="code-header">
                 <span class="code-lang">bash</span>
@@ -2009,49 +2017,114 @@
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <div class="step-title">Instalar o Plugin no Claude Code</div>
-            <div class="code-block" style="margin-top:8px;">
+            <div class="step-title">Conectar ao repositório GitHub <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
+            <div class="step-desc">Acesse <span class="ic">https://coderabbit.ai</span> → login com GitHub → autorize o repositório. A partir daí, todo PR recebe review automático.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 32px 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="plug" class="lucide-md" style="color:var(--accent2)"></i> Integração por CLI
+      </h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">Cada CLI de IA integra o CodeRabbit de forma diferente. Escolha a aba correspondente:</p>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(this, 'cr-claude')">Claude Code</button>
+          <button class="tab-btn" onclick="switchTab(this, 'cr-gemini')">Gemini CLI</button>
+          <button class="tab-btn" onclick="switchTab(this, 'cr-codex')">Codex CLI</button>
+        </div>
+        <div class="tab-content">
+
+          <!-- CLAUDE CODE -->
+          <div class="tab-panel active" id="cr-claude">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Claude Code usa o sistema de <strong style="color:var(--text);">plugins</strong> — o CodeRabbit é instalado como plugin nativo e adiciona slash commands diretamente no CLI:</p>
+            <div class="code-block" style="margin-bottom:12px;">
               <div class="code-header">
-                <span class="code-lang">bash</span>
+                <span class="code-lang">bash — instalar plugin</span>
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
               </div>
               <pre><code><span class="c-cmd">claude plugin install</span> coderabbit
 <span class="c-comment"># Ou dentro do Claude Code:</span>
 <span class="c-comment"># /plugin install coderabbit</span></code></pre>
             </div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <div class="step-title">Conectar ao repositório GitHub (uma vez só)</div>
-            <div class="step-desc">Acesse <span class="ic">https://coderabbit.ai</span> → login com GitHub → autorize o repositório. A partir daí, todo PR recebe review automático.</div>
-          </div>
-        </div>
-      </div>
-
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Comandos do Plugin dentro do Claude Code</h3>
-      <div class="code-block">
-        <div class="code-header">
-          <span class="code-lang">bash</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre><code>/coderabbit:review               <span class="c-comment"># revisa todas as mudanças</span>
+            <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Comandos disponíveis após instalação</h4>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — slash commands</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code>/coderabbit:review               <span class="c-comment"># revisa todas as mudanças</span>
 /coderabbit:review uncommitted   <span class="c-comment"># só mudanças não commitadas</span>
 /coderabbit:review committed     <span class="c-comment"># só mudanças commitadas</span>
 /coderabbit:review --base main   <span class="c-comment"># compara com main</span></code></pre>
-      </div>
-
-      <p style="font-size:13px; color:var(--text3); margin: 10px 0 6px;">Ou em linguagem natural — basta pedir ao Claude:</p>
-      <div class="code-block">
-        <div class="code-header">
-          <span class="code-lang">linguagem natural</span>
-        </div>
-        <pre><code>"Revise meu código antes de commitar"
+            </div>
+            <p style="font-size:13px; color:var(--text3); margin: 10px 0 6px;">Ou em linguagem natural — basta pedir ao Claude:</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">linguagem natural</span>
+              </div>
+              <pre><code>"Revise meu código antes de commitar"
 "Verifique se há problemas de segurança nas minhas mudanças"</code></pre>
+            </div>
+          </div>
+
+          <!-- GEMINI CLI -->
+          <div class="tab-panel" id="cr-gemini">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Gemini CLI <strong style="color:var(--text);">não tem sistema de plugins</strong>. O CodeRabbit é usado como ferramenta CLI independente — você roda os comandos diretamente no terminal:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — uso direto do CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Revisar mudanças não commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--uncommitted</span>
+
+<span class="c-comment"># Revisar mudanças commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--committed</span>
+
+<span class="c-comment"># Comparar com branch main</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--base</span> main</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Dica:</strong> você pode pedir ao Gemini CLI para rodar o comando <span class="ic">coderabbit review</span> em linguagem natural. Ele executa como qualquer outro comando de terminal.
+              </div>
+            </div>
+          </div>
+
+          <!-- CODEX CLI -->
+          <div class="tab-panel" id="cr-codex">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Codex CLI também <strong style="color:var(--text);">não tem sistema de plugins</strong>. Use o CodeRabbit como CLI independente no terminal:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — uso direto do CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Revisar mudanças não commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--uncommitted</span>
+
+<span class="c-comment"># Revisar mudanças commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--committed</span>
+
+<span class="c-comment"># Comparar com branch main</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--base</span> main</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Dica:</strong> peça ao Codex para executar <span class="ic">coderabbit review</span> — ele roda o comando no terminal integrado.
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">O loop autônomo com AIOX</h3>
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 0 0 12px;">O loop autônomo com AIOX</h3>
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">exemplo de instrução ao @dev</span>
