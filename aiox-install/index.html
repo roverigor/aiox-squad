@@ -1711,9 +1711,9 @@
 
       <!-- ESCOPOS DO MCP -->
       <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 28px 0 4px; display:flex; align-items:center; gap:8px;">
-        <i data-lucide="folder-tree" class="lucide-md" style="color:var(--accent3)"></i> Onde o MCP é instalado — Escopos do Claude Code
+        <i data-lucide="folder-tree" class="lucide-md" style="color:var(--accent3)"></i> Escopos do MCP <span style="font-size:11px; font-weight:500; color:var(--text3);">(Claude Code)</span>
       </h3>
-      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">O Claude Code usa um sistema de escopos para saber onde salvar cada configuração de MCP. Entender isso evita confusão na hora de instalar.</p>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">O Claude Code usa um sistema de escopos para saber onde salvar cada configuração de MCP. Entender isso evita confusão na hora de instalar. <strong style="color:var(--text2);">Gemini CLI e Codex CLI têm seus próprios formatos</strong> — veja as abas de instalação abaixo.</p>
 
       <div class="card" style="margin-bottom:16px;">
         <div class="card-title" style="margin-bottom:10px;"><i data-lucide="hard-drive" class="lucide-sm" style="color:var(--accent2)"></i> Estrutura de pastas no seu ambiente</div>
@@ -1748,16 +1748,34 @@
 
       <!-- COMO INSTALAR OS MCPs -->
       <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 32px 0 4px; display:flex; align-items:center; gap:8px;">
-        <i data-lucide="download" class="lucide-md" style="color:var(--accent2)"></i> Como instalar os MCPs do AIOX
+        <i data-lucide="download" class="lucide-md" style="color:var(--accent2)"></i> Como instalar os MCPs
       </h3>
-      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">Para cada MCP, rode o comando com <span class="ic">--scope user</span>. Isso instala globalmente — disponível em qualquer projeto, não só no AIOX:</p>
 
-      <div class="code-block" style="margin-bottom:16px;">
-        <div class="code-header">
-          <span class="code-lang">bash — instalar todos os MCPs recomendados</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      <div class="info-box critical" style="margin-bottom:16px;">
+        <i data-lucide="alert-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Cada CLI tem seu próprio sistema de configuração de MCPs.</strong>
+          Os comandos de instalação <strong>não são intercambiáveis</strong> entre Claude Code, Gemini CLI e Codex CLI. Escolha a aba correspondente ao CLI que você está usando.
         </div>
-        <pre><code><span class="c-comment"># context7 — documentação de bibliotecas para LLMs</span>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(this, 'mcp-claude')">Claude Code</button>
+          <button class="tab-btn" onclick="switchTab(this, 'mcp-gemini')">Gemini CLI</button>
+          <button class="tab-btn" onclick="switchTab(this, 'mcp-codex')">Codex CLI</button>
+        </div>
+        <div class="tab-content">
+
+          <!-- CLAUDE CODE -->
+          <div class="tab-panel active" id="mcp-claude">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">Usa <span class="ic">claude mcp add --scope user</span> → salva em <span class="ic">~/.claude.json</span>. Disponível globalmente em qualquer projeto:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Claude Code</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># context7 — documentação de bibliotecas para LLMs</span>
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> context7 <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @upstash/context7-mcp
 
 <span class="c-comment"># desktop-commander — gerenciamento de arquivos e terminal</span>
@@ -1768,26 +1786,86 @@
 
 <span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+            </div>
+            <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Verificar MCPs instalados</h4>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">claude mcp list</span>              <span class="c-comment"># listar todos os MCPs</span>
+<span class="c-cmd">claude mcp get</span> context7     <span class="c-comment"># detalhes de um MCP específico</span></code></pre>
+            </div>
+          </div>
+
+          <!-- GEMINI CLI -->
+          <div class="tab-panel" id="mcp-gemini">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Gemini CLI usa um arquivo de configuração próprio (<span class="ic">settings.json</span>) e <strong style="color:var(--text);">não tem comando <span class="ic">mcp add</span></strong> — você edita o JSON manualmente:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">~/.gemini/settings.json</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code>{
+  <span class="c-string">"mcpServers"</span>: {
+    <span class="c-string">"context7"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@upstash/context7-mcp"</span>]
+    },
+    <span class="c-string">"desktop-commander"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@wonderwhy-er/desktop-commander"</span>]
+    },
+    <span class="c-string">"playwright"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@playwright/mcp"</span>]
+    },
+    <span class="c-string">"exa"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"exa-mcp"</span>],
+      <span class="c-string">"env"</span>: { <span class="c-string">"EXA_API_KEY"</span>: <span class="c-string">"sua-chave-aqui"</span> }
+    }
+  }
+}</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Crie o diretório se não existir:</strong> <span class="ic">mkdir -p ~/.gemini</span> e depois crie o arquivo <span class="ic">settings.json</span> com o conteúdo acima.
+              </div>
+            </div>
+          </div>
+
+          <!-- CODEX CLI -->
+          <div class="tab-panel" id="mcp-codex">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Codex CLI tem sua própria sintaxe de comando — similar ao Claude Code mas com <span class="ic">codex mcp add</span>:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Codex CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># context7 — documentação de bibliotecas para LLMs</span>
+<span class="c-cmd">codex mcp add</span> context7 <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @upstash/context7-mcp
+
+<span class="c-comment"># desktop-commander — gerenciamento de arquivos e terminal</span>
+<span class="c-cmd">codex mcp add</span> desktop-commander <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @wonderwhy-er/desktop-commander
+
+<span class="c-comment"># playwright — automação de browser para testes</span>
+<span class="c-cmd">codex mcp add</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
+
+<span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
+<span class="c-cmd">codex mcp add</span> exa <span class="c-flag">--env</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="info-box warn">
+      <div class="info-box warn" style="margin-top:16px;">
         <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
         <div class="info-text">
-          No comando do <span class="ic">exa</span>, substitua <span class="ic">sua-chave-aqui</span> pela sua chave real. Obtenha em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a>. A chave fica salva na configuração local — não é commitada no repositório.
+          No comando do <span class="ic">exa</span> (em qualquer CLI), substitua <span class="ic">sua-chave-aqui</span> pela sua chave real. Obtenha em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a>. A chave fica salva na configuração local — não é commitada no repositório.
         </div>
-      </div>
-
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 20px 0 12px;">Verificar MCPs instalados</h3>
-      <div class="code-block">
-        <div class="code-header">
-          <span class="code-lang">bash</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre><code><span class="c-comment"># Listar todos os MCPs configurados</span>
-<span class="c-cmd">claude mcp list</span>
-
-<span class="c-comment"># Ver detalhes de um MCP específico</span>
-<span class="c-cmd">claude mcp get</span> context7</code></pre>
       </div>
 
       <!-- CONSUMO DE TOKENS -->
