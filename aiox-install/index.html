@@ -1286,6 +1286,147 @@
       </div>
     </div>
 
+      <!-- GITHUB CLI + VERCEL CLI -->
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="terminal" class="lucide-md" style="color:var(--accent3)"></i> Ferramentas CLI essenciais
+      </h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">Além do Node.js, o AIOX usa o <strong style="color:var(--text);">GitHub CLI</strong> (para PRs, CodeRabbit e controle de versão) e o <strong style="color:var(--text);">Vercel CLI</strong> (para deploy de páginas e projetos). Instale ambos antes de continuar.</p>
+
+      <!-- GITHUB CLI -->
+      <div class="card" style="border-color:rgba(209,255,0,0.2); margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(209,255,0,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="github" class="lucide-md" style="color:var(--accent2)"></i>
+          </div>
+          <div>
+            <div style="font-size:14px; font-weight:700; color:var(--text);">GitHub CLI <span class="ic">gh</span></div>
+            <div style="font-size:11px; color:var(--text3);">Gerencia repositórios, PRs e issues direto no terminal — necessário para CodeRabbit e @devops</div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab(this, 'gh-linux')">Linux / WSL</button>
+            <button class="tab-btn" onclick="switchTab(this, 'gh-macos')">macOS</button>
+            <button class="tab-btn" onclick="switchTab(this, 'gh-windows')">Windows</button>
+          </div>
+          <div class="tab-content">
+            <div class="tab-panel active" id="gh-linux">
+              <div class="code-block">
+                <div class="code-header">
+                  <span class="code-lang">bash — Ubuntu / Debian / WSL</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                </div>
+                <pre><code><span class="c-comment"># Adicionar repositório oficial do GitHub CLI</span>
+<span class="c-cmd">sudo apt-get update</span>
+<span class="c-cmd">sudo apt-get install</span> <span class="c-flag">-y</span> curl
+
+<span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> https://cli.github.com/packages/githubcli-archive-keyring.gpg | <span class="c-cmd">sudo dd</span> of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+<span class="c-cmd">echo</span> <span class="c-string">"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"</span> | <span class="c-cmd">sudo tee</span> /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+<span class="c-cmd">sudo apt-get update</span>
+<span class="c-cmd">sudo apt-get install</span> <span class="c-flag">-y</span> gh</code></pre>
+              </div>
+            </div>
+            <div class="tab-panel" id="gh-macos">
+              <div class="code-block">
+                <div class="code-header">
+                  <span class="code-lang">bash — macOS (Homebrew)</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                </div>
+                <pre><code><span class="c-cmd">brew install</span> gh</code></pre>
+              </div>
+            </div>
+            <div class="tab-panel" id="gh-windows">
+              <div class="code-block">
+                <div class="code-header">
+                  <span class="code-lang">powershell — Windows</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                </div>
+                <pre><code><span class="c-cmd">winget install</span> GitHub.cli</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Autenticar no GitHub</h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash — login (abre o browser)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-cmd">gh auth login</span>
+<span class="c-comment"># Escolha: GitHub.com → HTTPS → Login with a web browser</span>
+<span class="c-comment"># Copie o código, cole no browser e autorize</span>
+
+<span class="c-comment"># Verificar autenticação:</span>
+<span class="c-cmd">gh auth status</span></code></pre>
+        </div>
+      </div>
+
+      <!-- VERCEL CLI -->
+      <div class="card" style="border-color:rgba(6,182,212,0.2);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(6,182,212,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="triangle" class="lucide-md" style="color:var(--accent3)"></i>
+          </div>
+          <div>
+            <div style="font-size:14px; font-weight:700; color:var(--text);">Vercel CLI</div>
+            <div style="font-size:11px; color:var(--text3);">Deploy de páginas e projetos, gerenciamento de domínios e variáveis de ambiente</div>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-bottom:12px;">
+          <div class="code-header">
+            <span class="code-lang">bash — instalar globalmente (todas as plataformas)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-comment"># Instalar via npm (requer Node.js)</span>
+<span class="c-cmd">npm install</span> <span class="c-flag">-g</span> vercel</code></pre>
+        </div>
+
+        <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Autenticar na Vercel</h4>
+        <div class="code-block" style="margin-bottom:12px;">
+          <div class="code-header">
+            <span class="code-lang">bash — login (abre o browser)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-cmd">vercel login</span>
+<span class="c-comment"># Abre o browser — faça login com GitHub, GitLab ou email</span>
+
+<span class="c-comment"># Verificar autenticação:</span>
+<span class="c-cmd">vercel whoami</span></code></pre>
+        </div>
+
+        <div class="info-box tip" style="margin-top:0;">
+          <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+          <div class="info-text">
+            <strong>Conta gratuita:</strong> a Vercel tem um plano hobby gratuito que é suficiente para projetos pessoais e de estudo. Crie sua conta em <a href="https://vercel.com/signup" target="_blank" style="color:inherit; text-decoration:underline;">vercel.com/signup</a>.
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top:16px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Verificação rápida:</strong> após instalar tudo, confirme que os 3 CLIs estão disponíveis:
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top:12px;">
+        <div class="code-header">
+          <span class="code-lang">bash — verificar instalação</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-cmd">node</span> <span class="c-flag">-v</span>       <span class="c-comment"># deve mostrar v22.x.x</span>
+<span class="c-cmd">gh</span> <span class="c-flag">--version</span>  <span class="c-comment"># deve mostrar gh version 2.x.x</span>
+<span class="c-cmd">vercel</span> <span class="c-flag">-v</span>     <span class="c-comment"># deve mostrar vercel 5x.x.x</span></code></pre>
+      </div>
+
+    </section>
+
     <!-- SECTION 4 — CLAUDE CODE -->
     <section class="section" id="sec-claude">
       <div class="section-header">
