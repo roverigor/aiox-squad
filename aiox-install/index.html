@@ -321,7 +321,7 @@
   /* PROGRESS */
   .progress-track {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     margin-bottom: 48px;
     background: var(--bg2);
     border: 1px solid var(--border);
@@ -894,20 +894,16 @@
       <span class="nav-step">8</span>
       Instalação do AIOX
     </a>
-    <a href="#sec-dashboard" class="nav-item" onclick="setActive(this)">
-      <span class="nav-step">9</span>
-      Dashboard (opcional)
-    </a>
     <a href="#sec-mcp" class="nav-item" onclick="setActive(this)">
-      <span class="nav-step">10</span>
+      <span class="nav-step">9</span>
       MCP Ecosystem (opcional)
     </a>
     <a href="#sec-editors" class="nav-item" onclick="setActive(this)">
-      <span class="nav-step">11</span>
+      <span class="nav-step">10</span>
       IDE Editores de Código
     </a>
     <a href="#sec-first-run" class="nav-item" onclick="setActive(this)">
-      <span class="nav-step">12</span>
+      <span class="nav-step">11</span>
       Primeiro Uso
     </a>
 
@@ -960,7 +956,6 @@
         <span class="pill"><span class="pill-dot" style="background:#a78bfa"></span> Gemini CLI</span>
         <span class="pill"><span class="pill-dot" style="background:#D1FF00"></span> AIOX Core</span>
         <span class="pill"><span class="pill-dot" style="background:#f97316"></span> MCP Ecosystem</span>
-        <span class="pill"><span class="pill-dot" style="background:#f59e0b"></span> Dashboard</span>
         <span class="pill"><span class="pill-dot" style="background:#06b6d4"></span> Editores de Código</span>
       </div>
     </div>
@@ -1006,13 +1001,6 @@
         <div class="ps-num">6</div>
         <div class="ps-info">
           <div class="ps-label">FASE 6</div>
-          <div class="ps-name">Dashboard</div>
-        </div>
-      </div>
-      <div class="progress-step" data-step="7" title="Clique para marcar como concluída">
-        <div class="ps-num">7</div>
-        <div class="ps-info">
-          <div class="ps-label">FASE 7</div>
           <div class="ps-name">Primeiro Uso</div>
         </div>
       </div>
@@ -1505,21 +1493,6 @@
           </div>
         </a>
 
-        <a class="repo-card" href="https://github.com/SynkraAI/aios-dashboard" target="_blank">
-          <div class="repo-card-header">
-            <div class="repo-icon" style="background:rgba(6,182,212,0.1);"><i data-lucide="layout-dashboard" class="lucide-lg"></i></div>
-            <div>
-              <div class="repo-name">aios-dashboard</div>
-              <div class="repo-org">SynkraAI / aios-dashboard</div>
-            </div>
-          </div>
-          <div class="repo-desc">Interface web de observabilidade. Kanban de stories, monitor de eventos em tempo real, visualização de agentes e squads.</div>
-          <div class="repo-badges">
-            <span class="badge badge-optional">Opcional</span>
-            <span class="badge badge-wip">Dev inicial</span>
-          </div>
-        </a>
-
         <a class="repo-card" href="https://github.com/SynkraAI/mcp-ecosystem" target="_blank">
           <div class="repo-card-header">
             <div class="repo-icon" style="background:rgba(16,185,129,0.1);"><i data-lucide="wrench" class="lucide-lg"></i></div>
@@ -1543,7 +1516,7 @@
               <div class="repo-org">github.com / SynkraAI</div>
             </div>
           </div>
-          <div class="repo-desc">Organização completa. Issues, discussions, roadmap e todos os projetos do ecossistema Synkra AIOX — incluindo <span class="ic">aiox-core</span>, <span class="ic">aios-dashboard</span> e <span class="ic">mcp-ecosystem</span>.</div>
+          <div class="repo-desc">Organização completa. Issues, discussions, roadmap e todos os projetos do ecossistema Synkra AIOX — incluindo <span class="ic">aiox-core</span> e <span class="ic">mcp-ecosystem</span>.</div>
           <div class="repo-badges">
             <span class="badge" style="background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2);">Organização</span>
           </div>
@@ -1694,99 +1667,10 @@
       </div>
     </section>
 
-    <!-- SECTION 8 — DASHBOARD -->
-    <section class="section" id="sec-dashboard">
-      <div class="section-header">
-        <div class="section-num cyan">9</div>
-        <div class="section-title-group">
-          <h2 class="section-title">AIOS Dashboard <span class="tag tag-opt">Opcional</span></h2>
-          <p class="section-desc">Interface web de observabilidade — precisa de AIOX Core instalado</p>
-        </div>
-      </div>
-
-      <div class="info-box warn">
-        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
-        <div class="info-text">
-          <strong>Em desenvolvimento ativo.</strong>
-          O repositório permanece como <span class="ic">aios-dashboard</span> e os comandos de instalação do dashboard continuam usando <span class="ic">aios-core</span>. Contribuições são bem-vindas!
-        </div>
-      </div>
-
-      <div class="info-box info">
-        <i data-lucide="info" class="lucide-md info-icon"></i>
-        <div class="info-text">
-          <strong>O AIOX funciona 100% sem o Dashboard.</strong>
-          Ele existe apenas para <em>observar</em> o que acontece na CLI — nunca para controlar. A CLI é sempre a fonte da verdade.
-        </div>
-      </div>
-
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 0 0 12px;">Instalar o Dashboard</h3>
-      <div class="code-block">
-        <div class="code-header">
-          <span class="code-lang">bash</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre><code><span class="c-comment"># Dentro do projeto com AIOX instalado</span>
-<span class="c-cmd">mkdir</span> <span class="c-flag">-p</span> apps
-<span class="c-cmd">git clone</span> https://github.com/SynkraAI/aios-dashboard.git <span class="c-path">apps/dashboard</span>
-
-<span class="c-comment"># Dependências do Dashboard (Next.js)</span>
-<span class="c-cmd">npm install</span> <span class="c-flag">--prefix</span> apps/dashboard
-
-<span class="c-comment"># Dependências do Server (requer Bun — https://bun.sh)</span>
-<span class="c-cmd">cd</span> <span class="c-path">apps/dashboard/server</span>
-<span class="c-cmd">bun install</span></code></pre>
-      </div>
-
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 20px 0 12px;">Iniciar (2 terminais)</h3>
-      <div class="code-block">
-        <div class="code-header">
-          <span class="code-lang">bash — Terminal 1: Server de eventos (porta 4001)</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre><code><span class="c-cmd">cd</span> <span class="c-path">apps/dashboard/server</span>
-<span class="c-cmd">bun run dev</span>
-<span class="c-comment"># Saída esperada: 🚀 Monitor Server running on http://localhost:4001</span></code></pre>
-      </div>
-      <div class="code-block" style="margin-top: 8px;">
-        <div class="code-header">
-          <span class="code-lang">bash — Terminal 2: UI do Dashboard (porta 3000)</span>
-          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre><code><span class="c-cmd">npm run dev</span> <span class="c-flag">--prefix</span> apps/dashboard
-<span class="c-comment"># Saída esperada: ▲ Next.js — Local: http://localhost:3000</span></code></pre>
-      </div>
-
-      <div class="info-box warn" style="margin-top: 12px;">
-        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
-        <div class="info-text">
-          <strong>Requer Bun.</strong>
-          O server do Dashboard usa Bun como runtime. Instale em <a href="https://bun.sh" target="_blank" style="color:inherit;text-decoration:underline;">bun.sh</a> antes de rodar o server. O Dashboard em si (Next.js) usa npm normalmente.
-        </div>
-      </div>
-      <div style="margin-top: 12px; font-size:13px; color:var(--text3);">Abra <span class="ic">http://localhost:3000</span> no navegador.</div>
-
-      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 20px 0 12px;">Views disponíveis</h3>
-      <div class="card">
-        <table>
-          <thead>
-            <tr><th>View</th><th>O que faz</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Kanban</td><td>Board de stories com drag-and-drop (Backlog, Doing, Done)</td></tr>
-            <tr><td>Monitor</td><td>Feed em tempo real de eventos do Claude Code (tools, prompts, erros)</td></tr>
-            <tr><td>Agents</td><td>Lista de agentes AIOX ativos e em standby</td></tr>
-            <tr><td>Squads</td><td>Organograma visual dos squads instalados</td></tr>
-            <tr><td>Insights</td><td>Estatísticas e métricas do projeto</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
     <!-- SECTION 9 — MCP -->
     <section class="section" id="sec-mcp">
       <div class="section-header">
-        <div class="section-num green">10</div>
+        <div class="section-num green">9</div>
         <div class="section-title-group">
           <h2 class="section-title">MCP Ecosystem e CodeRabbit <span class="tag tag-opt">Opcional</span></h2>
           <p class="section-desc">Ferramentas que ampliam as capacidades do AIOX</p>
@@ -2067,10 +1951,10 @@
       </div>
     </section>
 
-    <!-- SECTION 11 — EDITORES DE CÓDIGO -->
+    <!-- SECTION 10 — EDITORES DE CÓDIGO -->
     <section class="section" id="sec-editors">
       <div class="section-header">
-        <div class="section-num cyan">11</div>
+        <div class="section-num cyan">10</div>
         <div class="section-title-group">
           <h2 class="section-title">IDE Editores de Código <span class="tag tag-opt">Opcional</span></h2>
           <p class="section-desc">Configure seu editor com IA — compatibilidade e passo a passo de instalação</p>
@@ -2344,10 +2228,10 @@
       </div>
     </section>
 
-    <!-- SECTION 12 — FIRST RUN -->
+    <!-- SECTION 11 — FIRST RUN -->
     <section class="section" id="sec-first-run">
       <div class="section-header">
-        <div class="section-num green">12</div>
+        <div class="section-num green">11</div>
         <div class="section-title-group">
           <h2 class="section-title">Primeiro Uso</h2>
           <p class="section-desc">Definição de first-value: ativação + greeting + comando em ≤ 10 min</p>
@@ -2518,29 +2402,6 @@
             <div class="step-desc">Não. O <span class="ic">npx</span> é usado apenas para instalar ou atualizar o AIOX. No dia a dia, você abre o CLI (<span class="ic">claude</span>, <span class="ic">codex</span> ou <span class="ic">gemini</span>) dentro do projeto e usa os agentes diretamente com <span class="ic">@agent-name</span>. O framework já está instalado localmente na pasta <span class="ic">.aiox-core/</span>.</div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
-          <div class="step-content">
-            <div class="step-title">Dashboard não inicia / erro no server</div>
-            <div class="step-desc">O server do Dashboard requer <strong>Bun</strong> como runtime. Verifique:</div>
-            <div class="code-block" style="margin-top:8px;">
-              <div class="code-header">
-                <span class="code-lang">bash</span>
-                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-              </div>
-              <pre><code><span class="c-comment"># Verificar se Bun está instalado</span>
-<span class="c-cmd">bun</span> <span class="c-flag">--version</span>
-
-<span class="c-comment"># Se não estiver, instale:</span>
-<span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> https://bun.sh/install | bash
-
-<span class="c-comment"># Reinicie o terminal e tente novamente</span>
-<span class="c-cmd">cd</span> <span class="c-path">apps/dashboard/server</span>
-<span class="c-cmd">bun install</span>
-<span class="c-cmd">bun run dev</span></code></pre>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="info-box tip" style="margin-top: 16px;">
@@ -2557,7 +2418,6 @@
       <div class="footer-text">Ative o <span class="ic">@aiox-master</span> e rode <span class="ic">*help</span> para ver tudo que está disponível.</div>
       <div class="footer-actions">
         <a href="https://github.com/SynkraAI/aiox-core" target="_blank" class="btn-lg purple"><i data-lucide="github" class="lucide-sm"></i> GitHub AIOX Core</a>
-        <a href="https://github.com/SynkraAI/aios-dashboard" target="_blank" class="btn-lg ghost"><i data-lucide="layout-dashboard" class="lucide-sm"></i> Dashboard</a>
         <a href="https://github.com/SynkraAI/mcp-ecosystem" target="_blank" class="btn-lg ghost"><i data-lucide="wrench" class="lucide-sm"></i> MCP Ecosystem</a>
         <a href="https://github.com/SynkraAI" target="_blank" class="btn-lg ghost"><i data-lucide="globe" class="lucide-sm"></i> SynkraAI Org</a>
       </div>
