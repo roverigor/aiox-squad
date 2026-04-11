@@ -1839,6 +1839,8 @@
             <tr><td><strong>desktop-commander</strong></td><td>❌ Não</td><td>Gerenciamento de arquivos e comandos de terminal</td></tr>
             <tr><td><strong>playwright</strong></td><td>❌ Não</td><td>Automação de browser para testes</td></tr>
             <tr><td><strong>exa</strong></td><td>✅ Sim</td><td>Busca web com IA e extração de conteúdo</td></tr>
+            <tr><td><strong>github</strong></td><td>✅ Sim (token)</td><td>Gerenciar repos, PRs, issues e code search direto na CLI</td></tr>
+            <tr><td><strong>vercel</strong></td><td>✅ Sim (token)</td><td>Deploy, domínios, env vars e status de projetos Vercel</td></tr>
           </tbody>
         </table>
       </div>
@@ -1926,7 +1928,13 @@
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
 
 <span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
-<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp
+
+<span class="c-comment"># github — repos, PRs, issues e code search (requer token)</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> github <span class="c-flag">-e</span> <span class="c-string">GITHUB_PERSONAL_ACCESS_TOKEN=ghp_seu-token-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @modelcontextprotocol/server-github
+
+<span class="c-comment"># vercel — deploy, domínios e env vars (requer token)</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> vercel <span class="c-flag">-e</span> <span class="c-string">VERCEL_API_TOKEN=seu-token-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @vercel/mcp</code></pre>
             </div>
             <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Verificar MCPs instalados</h4>
             <div class="code-block">
@@ -1965,6 +1973,16 @@
       <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
       <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"exa-mcp"</span>],
       <span class="c-string">"env"</span>: { <span class="c-string">"EXA_API_KEY"</span>: <span class="c-string">"sua-chave-aqui"</span> }
+    },
+    <span class="c-string">"github"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@modelcontextprotocol/server-github"</span>],
+      <span class="c-string">"env"</span>: { <span class="c-string">"GITHUB_PERSONAL_ACCESS_TOKEN"</span>: <span class="c-string">"ghp_seu-token-aqui"</span> }
+    },
+    <span class="c-string">"vercel"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@vercel/mcp"</span>],
+      <span class="c-string">"env"</span>: { <span class="c-string">"VERCEL_API_TOKEN"</span>: <span class="c-string">"seu-token-aqui"</span> }
     }
   }
 }</code></pre>
@@ -1995,7 +2013,13 @@
 <span class="c-cmd">codex mcp add</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
 
 <span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
-<span class="c-cmd">codex mcp add</span> exa <span class="c-flag">--env</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+<span class="c-cmd">codex mcp add</span> exa <span class="c-flag">--env</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp
+
+<span class="c-comment"># github — repos, PRs, issues e code search (requer token)</span>
+<span class="c-cmd">codex mcp add</span> github <span class="c-flag">--env</span> <span class="c-string">GITHUB_PERSONAL_ACCESS_TOKEN=ghp_seu-token-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @modelcontextprotocol/server-github
+
+<span class="c-comment"># vercel — deploy, domínios e env vars (requer token)</span>
+<span class="c-cmd">codex mcp add</span> vercel <span class="c-flag">--env</span> <span class="c-string">VERCEL_API_TOKEN=seu-token-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @vercel/mcp</code></pre>
             </div>
           </div>
 
@@ -2005,7 +2029,12 @@
       <div class="info-box warn" style="margin-top:16px;">
         <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
         <div class="info-text">
-          No comando do <span class="ic">exa</span> (em qualquer CLI), substitua <span class="ic">sua-chave-aqui</span> pela sua chave real. Obtenha em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a>. A chave fica salva na configuração local — não é commitada no repositório.
+          <strong>Tokens e chaves API:</strong> substitua os valores placeholder pelas suas chaves reais. As chaves ficam salvas na configuração local — não são commitadas no repositório.
+          <div style="margin-top:8px; font-size:12px; line-height:1.8;">
+            <strong>exa:</strong> obtenha em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a><br>
+            <strong>github:</strong> gere um Personal Access Token em <a href="https://github.com/settings/tokens" target="_blank" style="color:inherit; text-decoration:underline;">github.com/settings/tokens</a> (selecione escopos: <span class="ic">repo</span>, <span class="ic">read:org</span>)<br>
+            <strong>vercel:</strong> gere um token em <a href="https://vercel.com/account/tokens" target="_blank" style="color:inherit; text-decoration:underline;">vercel.com/account/tokens</a>
+          </div>
         </div>
       </div>
 
