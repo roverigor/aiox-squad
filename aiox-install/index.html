@@ -533,6 +533,70 @@
     color: #e2e8f0;
   }
 
+  /* Per-line copy system */
+  .cmd-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 12px;
+    margin: 2px 0;
+    border-radius: 6px;
+    transition: background var(--transition);
+    position: relative;
+  }
+
+  .cmd-line:hover {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .cmd-line .cmd-text {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .cmd-line .cmd-copy {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text3);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cmd-line:hover .cmd-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cmd-line .cmd-copy:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .cmd-line .cmd-copy.copied {
+    border-color: var(--green);
+    color: var(--green);
+    opacity: 1;
+  }
+
+  .comment-line {
+    padding: 2px 8px 2px 12px;
+    margin: 2px 0;
+    opacity: 0.6;
+  }
+
+  .empty-line {
+    height: 8px;
+  }
+
   code { font-family: inherit; }
 
   .c-comment { color: #4a5568; }
@@ -3015,12 +3079,26 @@
     if (panel) panel.classList.add('active');
   }
 
-  // COPY
+  // COPY — single block (header button copies all)
   function copyCode(btn) {
     const pre = btn.closest('.code-block').querySelector('pre');
     const text = pre.innerText;
     navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copiado!';
+      btn.textContent = 'Copiar tudo';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copiar tudo';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // COPY — per-line command copy
+  function copyCmd(btn) {
+    const line = btn.closest('.cmd-line');
+    const text = line.querySelector('.cmd-text').innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓';
       btn.classList.add('copied');
       setTimeout(() => {
         btn.textContent = 'Copiar';
@@ -3028,6 +3106,47 @@
       }, 2000);
     });
   }
+
+  // AUTO-TRANSFORM: split code blocks into per-line copyable commands
+  (function initPerLineCopy() {
+    document.querySelectorAll('.code-block pre code').forEach(code => {
+      const block = code.closest('.code-block');
+      // Skip JSON blocks, structure/config blocks, single-line blocks
+      const lang = block.querySelector('.code-lang');
+      const langText = lang ? lang.textContent.toLowerCase() : '';
+      if (langText.includes('json') || langText.includes('estrutura') || langText.includes('yaml')) return;
+
+      const html = code.innerHTML;
+      const lines = html.split('\n');
+
+      // Only transform blocks with multiple command lines
+      const cmdCount = lines.filter(l => {
+        const text = l.replace(/<[^>]*>/g, '').trim();
+        return text && !text.startsWith('#');
+      }).length;
+      if (cmdCount < 2) return;
+
+      let newHtml = '';
+      lines.forEach(line => {
+        const plainText = line.replace(/<[^>]*>/g, '').trim();
+
+        if (!plainText) {
+          newHtml += '<div class="empty-line"></div>';
+        } else if (plainText.startsWith('#')) {
+          newHtml += '<div class="comment-line">' + line + '</div>';
+        } else {
+          newHtml += '<div class="cmd-line"><span class="cmd-text">' + line + '</span><button class="cmd-copy" onclick="copyCmd(this)">Copiar</button></div>';
+        }
+      });
+
+      code.innerHTML = newHtml;
+      code.style.padding = '8px 0';
+
+      // Rename header button to "Copiar tudo"
+      const headerBtn = block.querySelector('.copy-btn');
+      if (headerBtn) headerBtn.textContent = 'Copiar tudo';
+    });
+  })();
 
   // SIDEBAR ACTIVE
   function setActive(el) {
