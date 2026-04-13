@@ -2213,6 +2213,21 @@
         </div>
       </div>
 
+      <div class="card" style="border-color:rgba(139,92,246,0.2); background:linear-gradient(135deg, rgba(139,92,246,0.03) 0%, rgba(139,92,246,0.01) 100%); margin-top:16px;">
+        <div class="card-title" style="margin-bottom:10px;"><i data-lucide="users" class="lucide-sm" style="color:var(--accent3)"></i> Agentes AIOX que usam o CodeRabbit</div>
+        <table>
+          <thead>
+            <tr><th>Agente</th><th>Como usa</th><th>Quando</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="ic">@dev</span> (Dex)</td><td>Executa review local via CLI antes de entregar</td><td>Durante implementação — loop de auto-correção (max 2 iterações)</td></tr>
+            <tr><td><span class="ic">@qa</span> (Quinn)</td><td>Valida se os findings do CodeRabbit foram resolvidos</td><td>No QA Gate — verifica qualidade do código entregue</td></tr>
+            <tr><td><span class="ic">@devops</span> (Gage)</td><td>Review automático nos PRs via GitHub App</td><td>Ao abrir PR — CodeRabbit revisa automaticamente sem comando</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px; color:var(--text3); margin-top:10px;">O CodeRabbit está integrado no <strong>Story Development Cycle (SDC)</strong>: <span class="ic">@dev</span> revisa localmente → <span class="ic">@qa</span> valida no gate → <span class="ic">@devops</span> recebe review automático no PR.</p>
+      </div>
+
       <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Pré-requisito — dependências do sistema</h3>
 
       <div class="info-box tip">
