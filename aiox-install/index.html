@@ -1838,7 +1838,7 @@
             <tr><td><strong>context7</strong></td><td>❌ Não</td><td>Documentação atualizada de bibliotecas para LLMs</td></tr>
             <tr><td><strong>desktop-commander</strong></td><td>❌ Não</td><td>Gerenciamento de arquivos e comandos de terminal</td></tr>
             <tr><td><strong>playwright</strong></td><td>❌ Não</td><td>Automação de browser para testes</td></tr>
-            <tr><td><strong>exa</strong></td><td>✅ Sim</td><td>Busca web com IA e extração de conteúdo</td></tr>
+            <tr><td><strong>exa</strong></td><td>✅ Sim (free tier)</td><td>Busca web com IA e extração de conteúdo</td></tr>
             <tr><td><strong>github</strong></td><td>✅ Sim (PAT)</td><td>Gerencia repositórios, issues, PRs e branches via prompt</td></tr>
             <tr><td><strong>vercel</strong></td><td>✅ Sim (OAuth)</td><td>Gerencia deployments, logs, projetos e domínios via prompt</td></tr>
           </tbody>
@@ -1927,8 +1927,26 @@
 <span class="c-comment"># playwright — automação de browser para testes</span>
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
 
-<span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
-<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+<span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai — free tier disponível)</span>
+
+<span class="c-comment"># Passo 1: abrir o .bashrc</span>
+<span class="c-cmd">nano</span> ~/.bashrc
+<span class="c-comment"># Adicionar no final do arquivo:</span>
+<span class="c-cmd">export</span> <span class="c-string">EXA_API_KEY=sua_chave_aqui</span>
+<span class="c-comment"># Salvar: Ctrl+O → Enter → Ctrl+X</span>
+
+<span class="c-comment"># Passo 2: ativar</span>
+<span class="c-cmd">source</span> ~/.bashrc
+
+<span class="c-comment"># Passo 3: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=$EXA_API_KEY</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="key" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Como obter sua chave:</strong> crie uma conta em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a> (free tier: 1.000 buscas/mês). A chave fica salva no <span class="ic">.bashrc</span> localmente — nunca é exposta no chat ou commitada no repositório.
+              </div>
             </div>
 
             <!-- VERCEL MCP -->
@@ -2100,7 +2118,7 @@
       <div class="info-box warn" style="margin-top:16px;">
         <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
         <div class="info-text">
-          No comando do <span class="ic">exa</span> (em qualquer CLI), substitua <span class="ic">sua-chave-aqui</span> pela sua chave real. Obtenha em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a>. A chave fica salva na configuração local — não é commitada no repositório.
+          <strong>Nunca cole tokens ou chaves diretamente nos comandos.</strong> Use variáveis de ambiente no <span class="ic">.bashrc</span> (como nos exemplos de Exa e GitHub acima). As chaves ficam salvas localmente — nunca são expostas no chat ou commitadas no repositório.
         </div>
       </div>
 
