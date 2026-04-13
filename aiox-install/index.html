@@ -1840,6 +1840,7 @@
             <tr><td><strong>playwright</strong></td><td>❌ Não</td><td>Automação de browser para testes</td></tr>
             <tr><td><strong>exa</strong></td><td>✅ Sim</td><td>Busca web com IA e extração de conteúdo</td></tr>
             <tr><td><strong>github</strong></td><td>✅ Sim (PAT)</td><td>Gerencia repositórios, issues, PRs e branches via prompt</td></tr>
+            <tr><td><strong>vercel</strong></td><td>✅ Sim (OAuth)</td><td>Gerencia deployments, logs, projetos e domínios via prompt</td></tr>
           </tbody>
         </table>
       </div>
@@ -1930,6 +1931,47 @@
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
             </div>
 
+            <!-- VERCEL MCP -->
+            <h4 style="font-size:14px; font-weight:700; color:var(--text); margin: 24px 0 4px; display:flex; align-items:center; gap:8px;">
+              <i data-lucide="triangle" class="lucide-sm" style="color:var(--accent2)"></i> Vercel MCP — MCP remoto (OAuth)
+            </h4>
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">
+              O Vercel MCP usa <strong style="color:var(--text)">OAuth</strong> — não precisa gerar token manualmente. O login é feito uma única vez pelo browser usando sua conta Vercel.
+            </p>
+
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Vercel MCP (Claude Code)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># vercel — gerenciamento de deployments, logs e projetos (requer autenticação OAuth)</span>
+
+<span class="c-comment"># Passo 1: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--transport http</span> vercel https://mcp.vercel.com <span class="c-flag">--scope user</span>
+
+<span class="c-comment"># Passo 2: abrir uma sessão do Claude Code</span>
+<span class="c-cmd">claude</span>
+
+<span class="c-comment"># Passo 3: autenticar com sua conta Vercel</span>
+<span class="c-cmd">/mcp</span>
+<span class="c-comment"># Vai abrir o browser — faça login com sua conta Vercel e autorize o acesso</span>
+<span class="c-comment"># Após autorizar, feche o browser e volte ao terminal</span></code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="info" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                Com o Vercel MCP configurado você consegue via prompt: ver status de deployments, analisar logs de erro, gerenciar projetos e domínios.
+              </div>
+            </div>
+
+            <div class="info-box tip" style="margin-bottom:16px;">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Teste rápido:</strong> abra uma sessão com <span class="ic">claude</span> e peça: <em>"Liste meus projetos na Vercel"</em>. Se retornar os dados, está configurado corretamente.
+              </div>
+            </div>
+
             <!-- GITHUB MCP -->
             <h4 style="font-size:14px; font-weight:700; color:var(--text); margin: 24px 0 4px; display:flex; align-items:center; gap:8px;">
               <i data-lucide="github" class="lucide-sm" style="color:var(--accent3)"></i> GitHub MCP — MCP remoto
@@ -1987,7 +2029,8 @@
               </div>
               <pre><code><span class="c-cmd">claude mcp list</span>              <span class="c-comment"># listar todos os MCPs</span>
 <span class="c-cmd">claude mcp get</span> context7     <span class="c-comment"># detalhes de um MCP específico</span>
-<span class="c-cmd">claude mcp get</span> github       <span class="c-comment"># verificar configuração do GitHub MCP</span></code></pre>
+<span class="c-cmd">claude mcp get</span> github       <span class="c-comment"># verificar configuração do GitHub MCP</span>
+<span class="c-cmd">claude mcp get</span> vercel       <span class="c-comment"># verificar configuração do Vercel MCP</span></code></pre>
             </div>
           </div>
 
