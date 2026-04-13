@@ -2178,6 +2178,13 @@
         </div>
       </div>
 
+      <div class="info-box info" style="margin-top:12px;">
+        <i data-lucide="book-open" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>O que é um PR (Pull Request)?</strong> É uma solicitação para incluir suas alterações de código no repositório principal do projeto. Funciona assim: você trabalha numa cópia separada (branch), e quando termina, abre um PR pedindo que as mudanças sejam revisadas e aprovadas antes de entrar no código principal. É onde o time (ou o CodeRabbit) revisa a qualidade do código.
+        </div>
+      </div>
+
       <p style="font-size:12px; color:var(--text3); margin-bottom:16px;">Integrado na camada 2 dos Quality Gates do framework AIOX</p>
 
       <div class="info-box critical">
@@ -2226,6 +2233,92 @@
           </tbody>
         </table>
         <p style="font-size:12px; color:var(--text3); margin-top:10px;">O CodeRabbit está integrado no <strong>Story Development Cycle (SDC)</strong>: <span class="ic">@dev</span> revisa localmente → <span class="ic">@qa</span> valida no gate → <span class="ic">@devops</span> recebe review automático no PR.</p>
+      </div>
+
+      <div class="card" style="border-color:rgba(209,255,0,0.2); background:linear-gradient(135deg, rgba(209,255,0,0.02) 0%, rgba(16,185,129,0.02) 100%); margin-top:16px;">
+        <div class="card-title" style="margin-bottom:14px;"><i data-lucide="git-branch" class="lucide-sm" style="color:var(--accent2)"></i> Como funciona o fluxo de review</div>
+        <p style="font-size:13px; color:var(--text2); line-height:1.6; margin-bottom:16px;">
+          O CodeRabbit <strong style="color:var(--text)">não altera código</strong> — ele apenas revisa e aponta problemas. Quem corrige é o <span class="ic">@dev</span>. Funciona como um code reviewer humano, mas automático e com IA.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:0; position:relative;">
+          <!-- Step 1 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--accent2); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div>
+              <div style="width:2px; height:32px; background:rgba(209,255,0,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);"><span class="ic">@dev</span> implementa o código</div>
+              <div style="font-size:12px; color:var(--text3);">Desenvolve a feature ou fix conforme a story</div>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--accent2); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div>
+              <div style="width:2px; height:32px; background:rgba(209,255,0,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);"><span class="ic">@dev</span> roda <span class="ic">/coderabbit:review</span></div>
+              <div style="font-size:12px; color:var(--text3);">Review local via CLI — analisa o código antes de entregar</div>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--yellow); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div>
+              <div style="width:2px; height:32px; background:rgba(234,179,8,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);">CodeRabbit retorna findings</div>
+              <div style="font-size:12px; color:var(--text3);">Lista de problemas: bugs, code smells, vulnerabilidades, melhorias</div>
+            </div>
+          </div>
+          <!-- Step 4 - loop -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--accent3); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">4</div>
+              <div style="width:2px; height:32px; background:rgba(139,92,246,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);"><span class="ic">@dev</span> corrige os findings <span style="font-size:11px; font-weight:500; color:var(--accent3); background:rgba(139,92,246,0.1); padding:2px 8px; border-radius:4px; margin-left:6px;">self-healing loop</span></div>
+              <div style="font-size:12px; color:var(--text3);">Lê cada finding, corrige o código e roda review novamente (máx. 2 iterações)</div>
+            </div>
+          </div>
+          <!-- Step 5 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">5</div>
+              <div style="width:2px; height:32px; background:rgba(16,185,129,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Review limpo → entrega para <span class="ic">@qa</span></div>
+              <div style="font-size:12px; color:var(--text3);">Código passa para o QA Gate — @qa valida se os findings foram resolvidos</div>
+            </div>
+          </div>
+          <!-- Step 6 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">6</div>
+              <div style="width:2px; height:32px; background:rgba(16,185,129,0.2);"></div>
+            </div>
+            <div style="padding-bottom:12px;">
+              <div style="font-size:13px; font-weight:600; color:var(--text);"><span class="ic">@devops</span> abre o PR</div>
+              <div style="font-size:12px; color:var(--text3);">CodeRabbit revisa automaticamente via GitHub App — segunda camada de review</div>
+            </div>
+          </div>
+          <!-- Step 7 -->
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+              <div style="width:28px; height:28px; border-radius:50%; background:var(--red); color:white; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700;">↩</div>
+            </div>
+            <div>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Findings críticos no PR? → volta para <span class="ic">@dev</span></div>
+              <div style="font-size:12px; color:var(--text3);">Se o CodeRabbit encontrar problemas no PR, o @dev é chamado de volta para corrigir</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Pré-requisito — dependências do sistema</h3>
