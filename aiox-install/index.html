@@ -1839,6 +1839,7 @@
             <tr><td><strong>desktop-commander</strong></td><td>❌ Não</td><td>Gerenciamento de arquivos e comandos de terminal</td></tr>
             <tr><td><strong>playwright</strong></td><td>❌ Não</td><td>Automação de browser para testes</td></tr>
             <tr><td><strong>exa</strong></td><td>✅ Sim</td><td>Busca web com IA e extração de conteúdo</td></tr>
+            <tr><td><strong>github</strong></td><td>✅ Sim (PAT)</td><td>Gerencia repositórios, issues, PRs e branches via prompt</td></tr>
           </tbody>
         </table>
       </div>
@@ -1928,6 +1929,56 @@
 <span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
 <span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
             </div>
+
+            <!-- GITHUB MCP -->
+            <h4 style="font-size:14px; font-weight:700; color:var(--text); margin: 24px 0 4px; display:flex; align-items:center; gap:8px;">
+              <i data-lucide="github" class="lucide-sm" style="color:var(--accent3)"></i> GitHub MCP — MCP remoto
+            </h4>
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">
+              Diferente dos outros MCPs, o GitHub MCP é um <strong style="color:var(--text)">MCP remoto</strong> — conecta via HTTP diretamente ao servidor do GitHub, sem instalar nada localmente. Requer um Personal Access Token (PAT).
+            </p>
+
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — GitHub MCP (Claude Code)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># github — gerenciamento de repositórios, issues e PRs (requer Personal Access Token)</span>
+
+<span class="c-comment"># Passo 1: abrir o .bashrc</span>
+<span class="c-cmd">nano</span> ~/.bashrc
+<span class="c-comment"># Adicionar no final do arquivo:</span>
+<span class="c-cmd">export</span> <span class="c-string">GITHUB_PAT=seu_token_aqui</span>
+<span class="c-comment"># Salvar: Ctrl+O → Enter → Ctrl+X</span>
+
+<span class="c-comment"># Passo 2: ativar</span>
+<span class="c-cmd">source</span> ~/.bashrc
+
+<span class="c-comment"># Passo 3: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add-json</span> github <span class="c-string">"{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp\",\"headers\":{\"Authorization\":\"Bearer $GITHUB_PAT\"}}"</span> <span class="c-flag">--scope user</span></code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="key" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Como gerar seu token:</strong> <span class="ic">github.com</span> → Settings → Developer settings → Personal access tokens → Tokens (classic). Marque as permissões: <span class="ic">repo</span>, <span class="ic">read:org</span> e <span class="ic">workflow</span>. O token fica salvo localmente — nunca é exposto no chat ou commitado no repositório.
+              </div>
+            </div>
+
+            <div class="info-box warn" style="margin-bottom:12px;">
+              <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Nota técnica:</strong> o GitHub MCP é um MCP remoto — conecta via HTTP diretamente ao servidor do GitHub, sem instalar nada localmente. O pacote <span class="ic">@modelcontextprotocol/server-github</span> foi depreciado em abril de 2025 e <strong>não deve ser usado</strong>.
+              </div>
+            </div>
+
+            <div class="info-box tip" style="margin-bottom:16px;">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Teste rápido:</strong> abra uma sessão do Claude Code com <span class="ic">claude</span> e peça: <em>"Liste meus repositórios do GitHub"</em>. Se retornar a lista dos seus repos, está configurado corretamente. Se der erro de autenticação, o token está errado ou expirado.
+              </div>
+            </div>
+
             <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Verificar MCPs instalados</h4>
             <div class="code-block">
               <div class="code-header">
@@ -1935,7 +1986,8 @@
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
               </div>
               <pre><code><span class="c-cmd">claude mcp list</span>              <span class="c-comment"># listar todos os MCPs</span>
-<span class="c-cmd">claude mcp get</span> context7     <span class="c-comment"># detalhes de um MCP específico</span></code></pre>
+<span class="c-cmd">claude mcp get</span> context7     <span class="c-comment"># detalhes de um MCP específico</span>
+<span class="c-cmd">claude mcp get</span> github       <span class="c-comment"># verificar configuração do GitHub MCP</span></code></pre>
             </div>
           </div>
 
