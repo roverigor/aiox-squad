@@ -21,6 +21,7 @@
   ],
   "rewrites": [
     { "source": "/aios-install", "destination": "/aios-install/index.html" },
-    { "source": "/aiox-install", "destination": "/aiox-install/index.html" }
+    { "source": "/aiox-install", "destination": "/aiox-install/index.html" },
+    { "source": "/aiox-install-mac", "destination": "/aiox-install-mac/index.html" }
   ]
 }
