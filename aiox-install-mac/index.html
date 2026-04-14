@@ -1,0 +1,2967 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instalação AIOX (Mac) — Claude Code · Codex CLI · Gemini CLI + Synkra AIOX</title>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* LUCIDE ICONS */
+  .lucide {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .lucide-sm { width: 13px; height: 13px; }
+  .lucide-md { width: 16px; height: 16px; }
+  .lucide-lg { width: 20px; height: 20px; }
+  .lucide-xl { width: 22px; height: 22px; }
+  :root {
+    --bg: #000000;
+    --bg2: #0a0a0a;
+    --bg3: #111111;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.15);
+    --accent: #D1FF00;
+    --accent2: #D1FF00;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --orange: #f97316;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --glass: rgba(255,255,255,0.03);
+    --glass-hover: rgba(255,255,255,0.05);
+    --sidebar-w: 280px;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: 0.2s ease;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: linear-gradient(180deg, var(--bg2) 0%, rgba(10,10,26,0.95) 100%);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.08) transparent;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+  .sidebar-header {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(209,255,0,0.03) 0%, rgba(139,92,246,0.03) 100%);
+  }
+
+  .sidebar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(209,255,0,0.1);
+    border: 1px solid rgba(209,255,0,0.2);
+    color: var(--accent2);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .sidebar-subtitle {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  .sidebar-nav { padding: 8px 0; flex: 1; }
+
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 14px 16px 4px;
+    opacity: 0.7;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 450;
+    transition: all var(--transition);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    position: relative;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+    border-left-color: rgba(209,255,0,0.3);
+  }
+
+  .nav-item.active {
+    color: var(--accent2);
+    background: rgba(209,255,0,0.06);
+    border-left-color: var(--accent2);
+    font-weight: 600;
+  }
+
+  .nav-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text3);
+    flex-shrink: 0;
+    transition: all var(--transition);
+  }
+
+  .nav-item:hover .nav-step {
+    border-color: rgba(209,255,0,0.3);
+    color: var(--text2);
+  }
+
+  .nav-item.active .nav-step {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #000;
+    box-shadow: 0 0 8px rgba(209,255,0,0.25);
+  }
+
+  .nav-item.done .nav-step {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .nav-item.done { color: var(--text3); }
+
+  /* MAIN */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    max-width: calc(100vw - var(--sidebar-w));
+  }
+
+  /* TOP NAV */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  .breadcrumb a { color: var(--text3); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text2); }
+  .breadcrumb .sep { color: var(--text3); }
+  .breadcrumb .current { color: var(--text); }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    background: var(--glass);
+  }
+
+  .btn-sm:hover {
+    background: var(--glass-hover);
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #000;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 60px 60px 80px;
+    max-width: 860px;
+  }
+
+  /* HERO */
+  .hero {
+    margin-bottom: 60px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(209,255,0,0.1);
+    border: 1px solid rgba(209,255,0,0.25);
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title .highlight { color: var(--accent2); }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--text2);
+    line-height: 1.6;
+    max-width: 620px;
+    margin-bottom: 28px;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* PROGRESS */
+  .progress-track {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin-bottom: 48px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .progress-step {
+    padding: 10px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .progress-step:last-child { border-right: none; }
+
+  .progress-step {
+    cursor: pointer;
+    user-select: none;
+  }
+  .progress-step:hover { background: rgba(255,255,255,0.02); }
+
+  .progress-step.active {
+    background: rgba(209,255,0,0.08);
+  }
+  .progress-step.active:hover { background: rgba(209,255,0,0.12); }
+
+  .progress-step.done {
+    background: rgba(16,185,129,0.05);
+  }
+  .progress-step.done:hover { background: rgba(16,185,129,0.09); }
+
+  .ps-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+
+  .progress-step.active .ps-num {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .progress-step.done .ps-num {
+    background: var(--green);
+    color: white;
+  }
+
+  .ps-info { min-width: 0; flex: 1; }
+  .ps-label { font-size: 9px; font-weight: 600; color: var(--text3); line-height: 1.2; }
+  .progress-step.active .ps-label { color: var(--accent2); }
+  .progress-step.done .ps-label { color: var(--green); }
+  .ps-name { font-size: 11px; font-weight: 600; color: var(--text2); line-height: 1.3; }
+  .progress-step.active .ps-name { color: var(--text); }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 56px;
+    scroll-margin-top: 70px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .section-num.purple { background: rgba(209,255,0,0.15); color: var(--accent2); }
+  .section-num.cyan { background: rgba(6,182,212,0.15); color: var(--accent3); }
+  .section-num.green { background: rgba(16,185,129,0.15); color: var(--green); }
+  .section-num.orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .section-num.yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+
+  .section-title-group { flex: 1; }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color var(--transition);
+  }
+
+  .card:hover { border-color: var(--border-hover); }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #050505;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-sm);
+    margin: 12px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .code-lang {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text3);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+  }
+
+  .copy-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--text2);
+  }
+
+  .copy-btn.copied {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  pre {
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.7;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    color: #e2e8f0;
+  }
+
+  /* Per-line copy system */
+  .cmd-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 12px;
+    margin: 2px 0;
+    border-radius: 6px;
+    transition: background var(--transition);
+    position: relative;
+  }
+
+  .cmd-line:hover {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .cmd-line .cmd-text {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .cmd-line .cmd-copy {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text3);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cmd-line:hover .cmd-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cmd-line .cmd-copy:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .cmd-line .cmd-copy.copied {
+    border-color: var(--green);
+    color: var(--green);
+    opacity: 1;
+  }
+
+  .comment-line {
+    padding: 2px 8px 2px 12px;
+    margin: 2px 0;
+    opacity: 0.6;
+  }
+
+  .empty-line {
+    height: 8px;
+  }
+
+  code { font-family: inherit; }
+
+  .c-comment { color: #4a5568; }
+  .c-cmd { color: #68d391; }
+  .c-flag { color: var(--accent2); }
+  .c-string { color: #fbd38d; }
+  .c-path { color: var(--accent3); }
+
+  /* INLINE CODE */
+  .ic {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 12px;
+    color: var(--accent3);
+  }
+
+  /* STEP */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition);
+  }
+
+  .step:hover { border-color: var(--border-hover); }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(209,255,0,0.12);
+    border: 1px solid rgba(209,255,0,0.25);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content { flex: 1; min-width: 0; }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .step-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* INFO BOX */
+  .info-box {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin: 12px 0;
+    line-height: 1.5;
+  }
+
+  .info-box.info { background: rgba(6,182,212,0.07); border: 1px solid rgba(6,182,212,0.2); color: #67e8f9; }
+  .info-box.tip { background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+  .info-box.warn { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+  .info-box.critical { background: rgba(209,255,0,0.07); border: 1px solid rgba(209,255,0,0.2); color: var(--accent2); }
+
+  .info-icon { flex-shrink: 0; margin-top: 2px; }
+  .info-text { flex: 1; }
+  .info-text strong { display: block; font-weight: 600; margin-bottom: 3px; }
+
+  /* TABS */
+  .tabs { margin-bottom: 0; }
+
+  .tab-nav {
+    display: flex;
+    gap: 2px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    padding: 4px;
+    border-bottom: none;
+  }
+
+  .tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all var(--transition);
+    font-family: inherit;
+  }
+
+  .tab-btn:hover { color: var(--text2); background: var(--glass-hover); }
+  .tab-btn.active { color: var(--text); background: rgba(209,255,0,0.15); }
+
+  .tab-content {
+    border: 1px solid var(--border);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    background: var(--bg2);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* REPO CARD */
+  .repo-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all var(--transition);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .repo-card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg3);
+    transform: translateY(-1px);
+  }
+
+  .repo-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .repo-icon {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(209,255,0,0.1);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .repo-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    font-family: 'JetBrains Mono', Consolas, monospace;
+  }
+
+  .repo-org {
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .repo-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .repo-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-required { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+  .badge-optional { background: rgba(6,182,212,0.1); color: var(--accent3); border: 1px solid rgba(6,182,212,0.2); }
+  .badge-wip { background: rgba(245,158,11,0.1); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ACTIVATION TABLE */
+  .activation-table td:first-child { color: var(--accent2); font-family: monospace; font-weight: 600; }
+  .activation-table td:nth-child(2) { color: var(--text3); }
+  .activation-table td:nth-child(3) { color: var(--accent3); font-family: monospace; }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .check-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* PILL TAGS */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  .tag-new { background: rgba(209,255,0,0.15); color: var(--accent2); }
+  .tag-tip { background: rgba(16,185,129,0.12); color: var(--green); }
+  .tag-opt { background: rgba(6,182,212,0.1); color: var(--accent3); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 60px;
+    padding: 32px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+
+  .footer-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .footer-text { font-size: 13px; color: var(--text3); margin-bottom: 20px; }
+  .footer-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+    border: 1px solid;
+  }
+
+  .btn-lg.purple {
+    background: rgba(209,255,0,0.12);
+    border-color: rgba(209,255,0,0.3);
+    color: var(--accent2);
+  }
+  .btn-lg.purple:hover {
+    background: rgba(209,255,0,0.2);
+    border-color: var(--accent);
+  }
+
+  .btn-lg.ghost {
+    background: var(--glass);
+    border-color: var(--border);
+    color: var(--text2);
+  }
+  .btn-lg.ghost:hover {
+    background: var(--glass-hover);
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    #sidebar { display: none; }
+    #main { max-width: 100vw; }
+    .content { padding: 32px 24px 60px; }
+    .hero-title { font-size: 32px; }
+    .progress-track { display: none; }
+    .top-nav { padding: 0 24px; }
+  }
+
+  @media (max-width: 600px) {
+    .content { padding: 24px 16px 48px; }
+    .hero-title { font-size: 28px; }
+    .top-nav { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div style="margin-bottom: 12px;">
+      <img src="/aiox-install/logo-aiox.svg" alt="AIOX Squad" style="width: 160px; height: auto; display: block;">
+    </div>
+    <div class="sidebar-badge"><i data-lucide="apple" class="lucide-sm"></i> Guia macOS</div>
+    <div class="sidebar-subtitle">Setup completo · CLI + Framework</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Pre-requisitos</div>
+    <a href="#sec-prereqs" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">1</span>
+      Requisitos
+    </a>
+    <a href="#sec-homebrew" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">2</span>
+      Homebrew
+    </a>
+    <a href="#sec-nodejs" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">3</span>
+      Node.js
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 8px;">AI CLI Tools</div>
+    <a href="#sec-claude" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">4</span>
+      Claude Code
+    </a>
+    <a href="#sec-codex" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">5</span>
+      Codex CLI
+    </a>
+    <a href="#sec-gemini" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">6</span>
+      Gemini CLI
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 8px;">Synkra AIOX</div>
+    <a href="#sec-repos" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">7</span>
+      Repositorios AIOX
+    </a>
+    <a href="#sec-install" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">8</span>
+      Instalacao do AIOX
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 8px;">MCP e Plugins</div>
+    <a href="#sec-mcp" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">9</span>
+      MCP Ecosystem (opcional)
+    </a>
+    <a href="#sec-coderabbit" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">10</span>
+      CodeRabbit Plugin
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 8px;">IDE, Editores de Codigo</div>
+    <a href="#sec-editors" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">11</span>
+      IDE Editores de Codigo
+    </a>
+    <a href="#sec-first-run" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step">12</span>
+      Primeiro Uso
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 8px;">Referencia</div>
+    <a href="#sec-troubleshooting" class="nav-item" onclick="setActive(this)">
+      <span class="nav-step"><i data-lucide="alert-circle" class="lucide-sm"></i></span>
+      Troubleshooting
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <div class="breadcrumb">
+      <a href="/">AIOX Squad</a>
+      <span class="sep">/</span>
+      <span class="current">Instalacao AIOX (Mac)</span>
+    </div>
+    <div class="top-actions">
+      <a href="https://github.com/SynkraAI" target="_blank" class="btn-sm">
+        <i data-lucide="github" class="lucide-sm"></i> SynkraAI
+      </a>
+      <a href="https://github.com/SynkraAI/aiox-core" target="_blank" class="btn-sm btn-primary">
+        <i data-lucide="zap" class="lucide-sm"></i> AIOX Core
+      </a>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+        <img src="/aiox-install/logo-aiox.svg" alt="AIOX Squad" style="height: 28px; width: auto; display: block;">
+        <span class="hero-tag" style="margin-bottom:0;"><i data-lucide="book-open" class="lucide-sm"></i> Guia Tecnico . 2026 . V5.0.3</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text2);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;"><i data-lucide="apple" class="lucide-sm"></i> macOS</span>
+      </div>
+      <h1 class="hero-title">
+        Instale o <span class="highlight">AIOX</span>
+      </h1>
+      <p class="hero-subtitle">
+        Guia simplificado para <strong>macOS</strong> — configure Claude Code, Codex CLI e Gemini CLI com o framework <strong>Synkra AIOX</strong>.
+      </p>
+      <div class="hero-pills">
+        <span class="pill"><span class="pill-dot" style="background:#10b981"></span> Claude Code</span>
+        <span class="pill"><span class="pill-dot" style="background:#06b6d4"></span> Codex CLI</span>
+        <span class="pill"><span class="pill-dot" style="background:#a78bfa"></span> Gemini CLI</span>
+        <span class="pill"><span class="pill-dot" style="background:#D1FF00"></span> AIOX Core</span>
+        <span class="pill"><span class="pill-dot" style="background:#f97316"></span> MCP Ecosystem</span>
+        <span class="pill"><span class="pill-dot" style="background:#06b6d4"></span> Editores de Codigo</span>
+      </div>
+    </div>
+
+    <!-- PROGRESS TRACK -->
+    <div class="progress-track" id="progress-track">
+      <div class="progress-step" data-step="1" title="Clique para marcar como concluida">
+        <div class="ps-num">1</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 1</div>
+          <div class="ps-name">Pre-requisitos</div>
+        </div>
+      </div>
+      <div class="progress-step" data-step="2" title="Clique para marcar como concluida">
+        <div class="ps-num">2</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 2</div>
+          <div class="ps-name">CLI Tools</div>
+        </div>
+      </div>
+      <div class="progress-step" data-step="3" title="Clique para marcar como concluida">
+        <div class="ps-num">3</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 3</div>
+          <div class="ps-name">AIOX Core</div>
+        </div>
+      </div>
+      <div class="progress-step" data-step="4" title="Clique para marcar como concluida">
+        <div class="ps-num">4</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 4</div>
+          <div class="ps-name">MCP e Plugins</div>
+        </div>
+      </div>
+      <div class="progress-step" data-step="5" title="Clique para marcar como concluida">
+        <div class="ps-num">5</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 5</div>
+          <div class="ps-name">IDE Editores</div>
+        </div>
+      </div>
+      <div class="progress-step" data-step="6" title="Clique para marcar como concluida">
+        <div class="ps-num">6</div>
+        <div class="ps-info">
+          <div class="ps-label">FASE 6</div>
+          <div class="ps-name">Primeiro Uso</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 1 — PREREQS -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-prereqs">
+      <div class="section-header">
+        <div class="section-num purple">1</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Requisitos do Sistema</h2>
+          <p class="section-desc">Verifique antes de comecar</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Requisito</th>
+              <th>Versao minima</th>
+              <th>Observacao</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>macOS</td><td>10.15+ (Catalina)</td><td>Catalina ou superior</td></tr>
+            <tr><td>Node.js</td><td>>= 18.0.0</td><td>v22 LTS recomendado — instale via NVM</td></tr>
+            <tr><td>npm</td><td>>= 9.0.0</td><td>Ja vem com o Node.js — ou use yarn / pnpm</td></tr>
+            <tr><td>RAM</td><td>4 GB+</td><td>8 GB recomendado</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box info">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Claude Code tem instalador nativo</strong>
+          Nao requer Node.js. Mas AIOX (via npx) e Codex/Gemini CLI precisam de Node.js >= 18 (recomendado v22 LTS via NVM). Se usar tudo junto, instale Node.js primeiro.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 2 — HOMEBREW -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-homebrew">
+      <div class="section-header">
+        <div class="section-num cyan">2</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Homebrew (Package Manager)</h2>
+          <p class="section-desc">O gerenciador de pacotes do macOS</p>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(6,182,212,0.25); background: linear-gradient(135deg, rgba(6,182,212,0.04) 0%, rgba(6,182,212,0.01) 100%); margin-bottom: 16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="beer" class="lucide-md" style="color:var(--accent3)"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:var(--text);">O que e o Homebrew?</div>
+            <div style="font-size:11px; color:var(--text3);">The Missing Package Manager for macOS</div>
+          </div>
+        </div>
+        <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.7;">
+          O Homebrew e o equivalente do <span class="ic">apt-get</span> no Linux — permite instalar ferramentas de desenvolvimento (git, gh, node, etc.) com um unico comando no Terminal. E o padrao de facto para desenvolvimento no Mac.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Instalar o Homebrew</div>
+            <div class="step-desc">Abra o Terminal (Cmd+Espaco, digite "Terminal") e cole o comando abaixo:</div>
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Terminal</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">/bin/bash</span> <span class="c-flag">-c</span> <span class="c-string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Verificar instalacao</div>
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">brew</span> <span class="c-flag">--version</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 12px;">
+        <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Homebrew e opcional mas altamente recomendado.</strong>
+          Simplifica a instalacao de ferramentas como git, gh (GitHub CLI), e muitas outras. Se preferir, pode instalar tudo manualmente — mas o Homebrew economiza muito tempo.
+        </div>
+      </div>
+
+      <div class="info-box warn" style="margin-top: 12px;">
+        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Apple Silicon (M1/M2/M3/M4):</strong>
+          Apos instalar o Homebrew em Macs com Apple Silicon, pode ser necessario adicionar o path ao <span class="ic">~/.zshrc</span>. O instalador mostra as instrucoes — siga o que aparecer no terminal.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 3 — NODE.JS -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-nodejs">
+      <div class="section-header">
+        <div class="section-num cyan">3</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Instalar Node.js</h2>
+          <p class="section-desc">Necessario para AIOX Core, Codex CLI e Gemini CLI</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="background:#0f0f0f;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:16px;">&#x1F7E2;</span>
+            <strong style="font-size:13px;color:#e2e8f0;">Node.js</strong>
+          </div>
+          <p style="font-size:13px;color:#94a3b8;line-height:1.5;">E o motor de execucao do JavaScript fora do navegador. Pense nele como o <em>"motor de um carro"</em> — e o que faz o JavaScript rodar na sua maquina.</p>
+        </div>
+        <div style="background:#0f0f0f;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:16px;">&#x1F4E6;</span>
+            <strong style="font-size:13px;color:#e2e8f0;">npm <span style="font-weight:400;color:#64748b;">(Node Package Manager)</span></strong>
+          </div>
+          <p style="font-size:13px;color:#94a3b8;line-height:1.5;">E o gerenciador de pacotes que vem junto com o Node.js. E como a <em>"loja de pecas"</em> do carro — voce usa para instalar bibliotecas e ferramentas.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 20px 0 12px;">Instalar via NVM (recomendado)</h3>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal macOS</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-cmd">curl</span> <span class="c-flag">-o-</span> https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+<span class="c-cmd">source</span> ~/.zshrc
+
+<span class="c-cmd">nvm install</span> <span class="c-flag">--lts</span>
+
+<span class="c-comment"># Verificar</span>
+<span class="c-cmd">node</span> <span class="c-flag">-v</span>  <span class="c-comment"># deve mostrar v22.x.x</span>
+<span class="c-cmd">npm</span> <span class="c-flag">-v</span></code></pre>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 12px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Por que NVM?</strong>
+          O NVM instala o Node.js no espaco do usuario — sem <span class="ic">sudo</span>, sem conflito de versoes. O <span class="ic">--lts</span> sempre pega a versao LTS mais estavel disponivel.
+        </div>
+      </div>
+
+    <!-- CLI EXPLAINER CARD -->
+    <div class="card" style="border-color:rgba(6,182,212,0.25); background: linear-gradient(135deg, rgba(6,182,212,0.04) 0%, rgba(6,182,212,0.01) 100%); margin-bottom: 0; margin-top: 24px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+        <div style="width:32px; height:32px; border-radius:8px; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <i data-lucide="terminal" class="lucide-md" style="color:var(--accent3)"></i>
+        </div>
+        <div>
+          <div style="font-size:13px; font-weight:700; color:var(--text);">O que e CLI?</div>
+          <div style="font-size:11px; color:var(--text3);">Command Line Interface — Interface de Linha de Comando</div>
+        </div>
+      </div>
+
+      <p style="font-size:13px; color:var(--text2); margin-bottom:16px; line-height:1.7;">
+        E quando voce controla um programa <strong style="color:var(--text)">digitando comandos de texto no terminal</strong>, em vez de clicar em botoes numa tela.
+      </p>
+
+      <table style="margin-bottom:16px;">
+        <thead>
+          <tr>
+            <th style="width:33%"></th>
+            <th style="color:#a78bfa;">Interface Visual (GUI)</th>
+            <th style="color:var(--accent3);">CLI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--text3); font-size:12px;">O que e</td>
+            <td>Janelas, botoes, icones</td>
+            <td>Texto puro no terminal</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text3); font-size:12px;">Exemplo</td>
+            <td>Abrir o VS Code clicando</td>
+            <td><span class="ic">code .</span> no terminal</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text3); font-size:12px;">Quem usa</td>
+            <td>Qualquer pessoa</td>
+            <td>Desenvolvedores</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex; gap:10px; align-items:flex-start; padding:12px 14px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px;">
+        <i data-lucide="lightbulb" class="lucide-sm" style="color:var(--yellow); margin-top:2px; flex-shrink:0;"></i>
+        <div style="font-size:12px; color:var(--text2); line-height:1.7;">
+          <strong style="color:var(--text);">Analogia simples:</strong><br>
+          <span style="color:#a78bfa;">GUI</span> e como dirigir um carro automatico — intuitivo, visual.<br>
+          <span style="color:var(--accent3);">CLI</span> e como pilotar com cambio manual — mais controle, mais velocidade, curva de aprendizado maior.
+        </div>
+      </div>
+    </div>
+
+      <!-- GITHUB CLI + VERCEL CLI -->
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="terminal" class="lucide-md" style="color:var(--accent3)"></i> Ferramentas CLI essenciais
+      </h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">Alem do Node.js, o AIOX usa o <strong style="color:var(--text);">GitHub CLI</strong> (para PRs, CodeRabbit e controle de versao) e o <strong style="color:var(--text);">Vercel CLI</strong> (para deploy de paginas e projetos). Instale ambos antes de continuar.</p>
+
+      <!-- GITHUB CLI -->
+      <div class="card" style="border-color:rgba(209,255,0,0.2); margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(209,255,0,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="github" class="lucide-md" style="color:var(--accent2)"></i>
+          </div>
+          <div>
+            <div style="font-size:14px; font-weight:700; color:var(--text);">GitHub CLI <span class="ic">gh</span></div>
+            <div style="font-size:11px; color:var(--text3);">Gerencia repositorios, PRs e issues direto no terminal — necessario para CodeRabbit e @devops</div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash — macOS (Homebrew)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-cmd">brew install</span> gh</code></pre>
+        </div>
+
+        <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Autenticar no GitHub</h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash — login (abre o browser)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-cmd">gh auth login</span>
+<span class="c-comment"># Escolha: GitHub.com -> HTTPS -> Login with a web browser</span>
+<span class="c-comment"># Copie o codigo, cole no browser e autorize</span>
+
+<span class="c-comment"># Verificar autenticacao:</span>
+<span class="c-cmd">gh auth status</span></code></pre>
+        </div>
+      </div>
+
+      <!-- VERCEL CLI -->
+      <div class="card" style="border-color:rgba(6,182,212,0.2);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(6,182,212,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="triangle" class="lucide-md" style="color:var(--accent3)"></i>
+          </div>
+          <div>
+            <div style="font-size:14px; font-weight:700; color:var(--text);">Vercel CLI</div>
+            <div style="font-size:11px; color:var(--text3);">Deploy de paginas e projetos, gerenciamento de dominios e variaveis de ambiente</div>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-bottom:12px;">
+          <div class="code-header">
+            <span class="code-lang">bash — instalar globalmente</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-comment"># Instalar via npm (requer Node.js)</span>
+<span class="c-cmd">npm install</span> <span class="c-flag">-g</span> vercel</code></pre>
+        </div>
+
+        <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Autenticar na Vercel</h4>
+        <div class="code-block" style="margin-bottom:12px;">
+          <div class="code-header">
+            <span class="code-lang">bash — login (abre o browser)</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><code><span class="c-cmd">vercel login</span>
+<span class="c-comment"># Abre o browser — faca login com GitHub, GitLab ou email</span>
+
+<span class="c-comment"># Verificar autenticacao:</span>
+<span class="c-cmd">vercel whoami</span></code></pre>
+        </div>
+
+        <div class="info-box tip" style="margin-top:0;">
+          <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+          <div class="info-text">
+            <strong>Conta gratuita:</strong> a Vercel tem um plano hobby gratuito que e suficiente para projetos pessoais e de estudo. Crie sua conta em <a href="https://vercel.com/signup" target="_blank" style="color:inherit; text-decoration:underline;">vercel.com/signup</a>.
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top:16px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Verificacao rapida:</strong> apos instalar tudo, confirme que os 3 CLIs estao disponiveis:
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top:12px;">
+        <div class="code-header">
+          <span class="code-lang">bash — verificar instalacao</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-cmd">node</span> <span class="c-flag">-v</span>       <span class="c-comment"># deve mostrar v22.x.x</span>
+<span class="c-cmd">gh</span> <span class="c-flag">--version</span>  <span class="c-comment"># deve mostrar gh version 2.x.x</span>
+<span class="c-cmd">vercel</span> <span class="c-flag">-v</span>     <span class="c-comment"># deve mostrar vercel 5x.x.x</span></code></pre>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 4 — CLAUDE CODE -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-claude">
+      <div class="section-header">
+        <div class="section-num green">4</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Claude Code</h2>
+          <p class="section-desc">CLI oficial da Anthropic — melhor compatibilidade com AIOX</p>
+        </div>
+      </div>
+
+      <div class="info-box critical">
+        <i data-lucide="trophy" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Claude Code tem paridade de hooks completa com o AIOX</strong>
+          E o CLI de referencia para automacao maxima de contexto, guardrails e auditoria. Se voce vai usar apenas um CLI, use Claude Code.
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal macOS</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-comment"># Instalar Claude Code</span>
+<span class="c-cmd">npm install</span> <span class="c-flag">-g</span> @anthropic-ai/claude-code
+
+<span class="c-comment"># Verificar instalacao</span>
+<span class="c-cmd">claude</span> <span class="c-flag">--version</span>
+
+<span class="c-comment"># Iniciar (vai pedir login Anthropic)</span>
+<span class="c-cmd">claude</span></code></pre>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 12px;">
+        <i data-lucide="check-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          Apos instalar, abra <span class="ic">claude</span> no terminal. Ele vai abrir o processo de autenticacao com a Anthropic. Voce precisa de uma conta em <strong>claude.ai</strong>.
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top: 12px;">
+        <i data-lucide="refresh-cw" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Sync dedicado de agentes:</strong> O arquivo <span class="ic">.claude/CLAUDE.md</span> e carregado automaticamente. Para sincronizar agentes com o Claude Code apos instalar o AIOX, use: <span class="ic">npm run sync:ide:claude</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 5 — CODEX -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-codex">
+      <div class="section-header">
+        <div class="section-num cyan">5</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Codex CLI <span class="tag tag-opt">Opcional</span></h2>
+          <p class="section-desc">CLI da OpenAI — paridade parcial com AIOX</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-comment"># Instalar Codex CLI</span>
+<span class="c-cmd">npm install</span> <span class="c-flag">-g</span> @openai/codex
+
+<span class="c-comment"># Verificar</span>
+<span class="c-cmd">codex</span> <span class="c-flag">--version</span>
+
+<span class="c-comment"># Iniciar (login com conta ChatGPT — abre no browser)</span>
+<span class="c-cmd">codex</span></code></pre>
+      </div>
+
+      <div class="info-box tip">
+        <i data-lucide="check-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Incluso na sua assinatura ChatGPT.</strong>
+          O Codex CLI autentica direto com sua conta ChatGPT — sem configurar chaves. Ao rodar <span class="ic">codex</span> pela primeira vez, ele abre o login no browser. Por tempo limitado, tambem disponivel nos planos Free e Go.
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <table>
+          <thead><tr><th>Plano ChatGPT</th><th>Acesso ao Codex CLI</th></tr></thead>
+          <tbody>
+            <tr><td>Free / Go</td><td>Incluso (por tempo limitado)</td></tr>
+            <tr><td>Plus</td><td>Incluso</td></tr>
+            <tr><td>Pro</td><td>Incluso (limites maiores)</td></tr>
+            <tr><td>Business / Enterprise / Edu</td><td>Incluso</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box warn" style="margin-top: 12px;">
+        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Paridade parcial com AIOX:</strong>
+          Algumas automacoes dependem do <span class="ic">AGENTS.md</span>, <span class="ic">/skills</span> e MCP. Ativacao de agentes usa <span class="ic">/skills</span> em vez de <span class="ic">@agent-name</span>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 6 — GEMINI -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-gemini">
+      <div class="section-header">
+        <div class="section-num orange">6</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Gemini CLI <span class="tag tag-opt">Opcional</span></h2>
+          <p class="section-desc">CLI do Google — alta paridade com AIOX</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-comment"># Instalar Gemini CLI</span>
+<span class="c-cmd">npm install</span> <span class="c-flag">-g</span> @google/gemini-cli
+
+<span class="c-comment"># Verificar</span>
+<span class="c-cmd">gemini</span> <span class="c-flag">--version</span>
+
+<span class="c-comment"># Iniciar (login com conta Google — abre no browser)</span>
+<span class="c-cmd">gemini</span></code></pre>
+      </div>
+
+      <div class="info-box tip">
+        <i data-lucide="check-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Gratuito com conta Google pessoal.</strong>
+          O Gemini CLI autentica com sua conta Google — sem configurar chaves. Ao rodar <span class="ic">gemini</span> pela primeira vez, ele abre o login no browser. O free tier ja inclui acesso ao Gemini 2.5 Pro com janela de 1M tokens.
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <table>
+          <thead><tr><th>Plano</th><th>Limites no Gemini CLI</th><th>Preco</th></tr></thead>
+          <tbody>
+            <tr><td>Conta Google (gratis)</td><td>60 req/min . 1.000 req/dia</td><td>Gratis</td></tr>
+            <tr><td>Google AI Pro</td><td>Limites maiores (ideal para uso diario)</td><td>~US$ 19,99/mes</td></tr>
+            <tr><td>Google AI Ultra</td><td>Limites mais altos + prioridade</td><td>~US$ 249,99/mes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box" style="margin-top: 12px; background: rgba(6,182,212,0.05); border-color: rgba(6,182,212,0.15);">
+        <i data-lucide="info" class="lucide-md info-icon" style="color:var(--accent3);"></i>
+        <div class="info-text" style="color:var(--text2);">
+          Gemini CLI tem alta paridade de hooks com AIOX. Ativacao de agentes usa <span class="ic">/aiox-menu</span> -> <span class="ic">/aiox-&lt;agent&gt;</span>. Boa cobertura de automacoes pre/post tool e sessao.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ======================================================== -->
+    <!-- SECTION 7 — REPOS -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-repos">
+      <div class="section-header">
+        <div class="section-num purple">7</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Repositorios Synkra AIOX</h2>
+          <p class="section-desc">O ecossistema open source do AIOX</p>
+        </div>
+      </div>
+
+      <div class="info-box critical">
+        <i data-lucide="building-2" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Organizacao SynkraAI no GitHub</strong>
+          Todos os repositorios AIOX sao open source e estao em <a href="https://github.com/SynkraAI" target="_blank" style="color:inherit;text-decoration:underline;">github.com/SynkraAI</a>.
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 16px;">
+        <a class="repo-card" href="https://github.com/SynkraAI/aiox-core" target="_blank">
+          <div class="repo-card-header">
+            <div class="repo-icon"><i data-lucide="zap" class="lucide-lg"></i></div>
+            <div>
+              <div class="repo-name">aiox-core</div>
+              <div class="repo-org">SynkraAI / aiox-core</div>
+            </div>
+          </div>
+          <div class="repo-desc">Framework principal. Contem todos os agentes, workflows, tasks e templates do AIOX. Instale com <span class="ic">npx aiox-core</span>.</div>
+          <div class="repo-badges">
+            <span class="badge badge-required">Obrigatorio</span>
+            <span class="badge" style="background:rgba(209,255,0,0.1);color:var(--accent2);border:1px solid rgba(209,255,0,0.2);">npm package</span>
+            <span class="badge" style="background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.2);">v5.0.3</span>
+            <span class="badge" style="background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2);">2.1k</span>
+          </div>
+        </a>
+
+        <a class="repo-card" href="https://github.com/SynkraAI/mcp-ecosystem" target="_blank">
+          <div class="repo-card-header">
+            <div class="repo-icon" style="background:rgba(16,185,129,0.1);"><i data-lucide="wrench" class="lucide-lg"></i></div>
+            <div>
+              <div class="repo-name">mcp-ecosystem</div>
+              <div class="repo-org">SynkraAI / mcp-ecosystem</div>
+            </div>
+          </div>
+          <div class="repo-desc">Configuracoes MCP prontas. Presets para desenvolvimento, pesquisa e full. Configs para Claude Code e Cursor.</div>
+          <div class="repo-badges">
+            <span class="badge badge-optional">Opcional</span>
+            <span class="badge" style="background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.2);">configs</span>
+          </div>
+        </a>
+
+        <a class="repo-card" href="https://github.com/SynkraAI" target="_blank">
+          <div class="repo-card-header">
+            <div class="repo-icon" style="background:rgba(245,158,11,0.1);"><i data-lucide="globe" class="lucide-lg"></i></div>
+            <div>
+              <div class="repo-name">SynkraAI</div>
+              <div class="repo-org">github.com / SynkraAI</div>
+            </div>
+          </div>
+          <div class="repo-desc">Organizacao completa. Issues, discussions, roadmap e todos os projetos do ecossistema Synkra AIOX — incluindo <span class="ic">aiox-core</span> e <span class="ic">mcp-ecosystem</span>.</div>
+          <div class="repo-badges">
+            <span class="badge" style="background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2);">Organizacao</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 8 — INSTALL AIOX -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-install">
+      <div class="section-header">
+        <div class="section-num purple">8</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Instalar AIOX Core <span class="tag tag-new">Principal</span></h2>
+          <p class="section-desc">Um comando instala tudo — voce so roda npx uma vez</p>
+        </div>
+      </div>
+
+      <div class="info-box tip" style="margin-bottom: 20px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>npx e so na instalacao.</strong>
+          Voce roda <span class="ic">npx aiox-core init</span> apenas uma vez para criar o projeto. Depois disso, o AIOX ja esta instalado localmente e voce usa os agentes direto na IDE (Claude Code, Cursor, etc.) sem precisar rodar <span class="ic">npx</span> novamente. Pense no <span class="ic">npx</span> como o instalador de um programa — voce usa uma vez e depois abre o programa normalmente.
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(this, 'aios-new')">Novo Projeto</button>
+          <button class="tab-btn" onclick="switchTab(this, 'aios-existing')">Projeto Existente</button>
+          <button class="tab-btn" onclick="switchTab(this, 'aios-update')">Atualizar</button>
+        </div>
+        <div class="tab-content">
+          <div class="tab-panel active" id="aios-new">
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Criar novo projeto com assistente interativo</span>
+<span class="c-cmd">npx aiox-core init</span> <span class="c-string">meu-projeto</span>
+
+<span class="c-comment"># Ou com versao especifica</span>
+<span class="c-cmd">npx aiox-core@latest init</span> <span class="c-string">meu-projeto</span></code></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="aios-existing">
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Instalar em projeto existente</span>
+<span class="c-cmd">cd</span> <span class="c-path">seu-projeto</span>
+<span class="c-cmd">npx aiox-core install</span>
+
+<span class="c-comment"># O instalador detecta automaticamente sua configuracao</span></code></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="aios-update">
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Upstream Auto-Update — atualiza sem perder customizacoes</span>
+<span class="c-cmd">npx aiox-core@latest install</span>
+
+<span class="c-comment"># Simular antes (ver o que muda sem aplicar nada)</span>
+<span class="c-cmd">npx aiox-core install</span> <span class="c-flag">--dry-run</span>
+
+<span class="c-comment"># Verificar saude apos atualizar</span>
+<span class="c-cmd">npx aiox-core doctor</span>
+
+<span class="c-comment"># Corrigir problemas automaticamente (se houver)</span>
+<span class="c-cmd">npx aiox-core doctor</span> <span class="c-flag">--fix</span></code></pre>
+            </div>
+            <div class="info-box" style="margin-top: 10px; background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.15);">
+              <i data-lucide="check-circle" class="lucide-md info-icon" style="color:var(--green);"></i>
+              <div class="info-text" style="color:var(--text2);">
+                <strong>O que o updater faz automaticamente:</strong> detecta a instalacao existente, faz backup das suas customizacoes em <span class="ic">.aiox-backup/</span>, atualiza apenas os arquivos do core que mudaram e preserva suas configuracoes, squads e templates personalizados.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">O que o instalador faz</h3>
+      <div class="checklist">
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Download da versao mais recente do NPM</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Assistente interativo com @clack/prompts (escolha de IDE, gerenciador de pacotes)</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Configuracao automatica do IDE (Codex CLI, Cursor ou Claude Code)</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Setup de todos os agentes e workflows AIOX no projeto</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Criacao dos arquivos de configuracao necessarios</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Inicializacao do sistema de meta-agentes</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Verificacoes de saude do sistema</div>
+        <div class="check-item"><i data-lucide="check-circle-2" class="lucide-sm check-icon" style="color:var(--green)"></i> Suporte nativo a macOS (Intel e Apple Silicon)</div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Estrutura instalada</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">estrutura</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-path">meu-projeto/</span>
+├── <span class="c-path">.aiox-core/</span>          <span class="c-comment"># Framework AIOX (nao modificar)</span>
+│   ├── <span class="c-path">development/</span>
+│   │   ├── <span class="c-path">agents/</span>          <span class="c-comment"># Agentes: @dev, @qa, @architect, @pm...</span>
+│   │   ├── <span class="c-path">tasks/</span>           <span class="c-comment"># Tasks executaveis</span>
+│   │   └── <span class="c-path">templates/</span>       <span class="c-comment"># Templates de docs</span>
+│   ├── <span class="c-path">core/</span>                <span class="c-comment"># Configuracao central</span>
+│   ├── <span class="c-path">hooks/</span>               <span class="c-comment"># Hooks de ciclo de vida</span>
+│   └── <span class="c-path">workflows/</span>           <span class="c-comment"># Workflows multi-step</span>
+├── <span class="c-path">.claude/</span>             <span class="c-comment"># Integracao Claude Code</span>
+├── <span class="c-path">.codex/</span>              <span class="c-comment"># Integracao Codex CLI</span>
+├── <span class="c-path">.gemini/</span>             <span class="c-comment"># Integracao Gemini CLI</span>
+├── <span class="c-path">docs/</span>
+│   └── <span class="c-path">stories/</span>             <span class="c-comment"># Stories de desenvolvimento</span>
+├── <span class="c-path">squads/</span>              <span class="c-comment"># Squads customizados</span>
+└── <span class="c-path">packages/</span>            <span class="c-comment"># Pacotes compartilhados</span></code></pre>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Verificar instalacao</h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:12px;">Apos instalar, confirme que tudo esta funcionando:</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-cmd">npx aiox-core doctor</span>
+
+<span class="c-comment"># Se houver problemas, corrija automaticamente:</span>
+<span class="c-cmd">npx aiox-core doctor</span> <span class="c-flag">--fix</span></code></pre>
+      </div>
+      <div class="code-block" style="margin-top: 8px;">
+        <div class="code-header">
+          <span class="code-lang">saida esperada</span>
+        </div>
+        <pre><code><span class="c-comment">AIOX System Diagnostics</span>
+<span style="color:var(--green)">OK</span> Node.js version: v22.x.x (meets requirement: &gt;=18.0.0)
+<span style="color:var(--green)">OK</span> npm version: 10.x.x
+<span style="color:var(--green)">OK</span> Git installed
+<span style="color:var(--green)">OK</span> Synkra AIOX: v5.0.3
+<span style="color:var(--green)">OK</span> .aiox-core/ directory exists
+<span style="color:var(--green)">OK</span> Agent files found
+<span style="color:var(--green)">OK</span> Workflow files found
+<span style="color:var(--green)">OK</span> All checks passed! Your installation is healthy.</code></pre>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 9 — MCP -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-mcp">
+      <div class="section-header">
+        <div class="section-num green">9</div>
+        <div class="section-title-group">
+          <h2 class="section-title">MCP Ecosystem <span class="tag tag-opt">Opcional</span></h2>
+          <p class="section-desc">Servidores MCP que ampliam as capacidades do Claude Code</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 0 0 8px;">MCPs opcionais do AIOX</h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:12px;">Os MCPs <strong>nao estao incluidos</strong> no <span class="ic">npx aiox-core install</span>. Sao ferramentas separadas que ampliam as capacidades do Claude Code. O AIOX funciona 100% sem eles — instale apenas quando quiser capacidades extras.</p>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr><th>MCP</th><th>Chave API?</th><th>Para que serve</th><th>Agente AIOX</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>context7</strong></td><td>Nao</td><td>Documentacao atualizada de bibliotecas para LLMs</td><td><span class="ic">@dev</span></td></tr>
+            <tr><td><strong>desktop-commander</strong></td><td>Nao</td><td>Gerenciamento de arquivos e comandos de terminal</td><td><span class="ic">@dev</span></td></tr>
+            <tr><td><strong>playwright</strong></td><td>Nao</td><td>Automacao de browser para testes</td><td><span class="ic">@qa</span></td></tr>
+            <tr><td><strong>exa</strong></td><td>Sim (free tier)</td><td>Busca web com IA e extracao de conteudo</td><td><span class="ic">@analyst</span></td></tr>
+            <tr><td><strong>github</strong></td><td>Sim (PAT)</td><td>Gerencia repositorios, issues, PRs e branches via prompt</td><td><span class="ic">@devops</span></td></tr>
+            <tr><td><strong>vercel</strong></td><td>Sim (OAuth)</td><td>Gerencia deployments, logs, projetos e dominios via prompt</td><td><span class="ic">@devops</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 12px;">
+        <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Recomendacao para iniciantes:</strong> instale apenas <span class="ic">context7</span> e <span class="ic">desktop-commander</span> (sem chave API, zero configuracao extra). Os demais sao para uso avancado.
+        </div>
+      </div>
+
+      <!-- ESCOPOS DO MCP -->
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 28px 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="folder-tree" class="lucide-md" style="color:var(--accent3)"></i> Escopos do MCP <span style="font-size:11px; font-weight:500; color:var(--text3);">(Claude Code)</span>
+      </h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">O Claude Code usa um sistema de escopos para saber onde salvar cada configuracao de MCP. Entender isso evita confusao na hora de instalar. <strong style="color:var(--text2);">Gemini CLI e Codex CLI tem seus proprios formatos</strong> — veja as abas de instalacao abaixo.</p>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:10px;"><i data-lucide="hard-drive" class="lucide-sm" style="color:var(--accent2)"></i> Estrutura de pastas no seu ambiente</div>
+        <div class="code-block" style="margin:0;">
+          <div class="code-header">
+            <span class="code-lang">estrutura</span>
+          </div>
+          <pre><code><span class="c-path">~/meu-usuario/</span>          <span class="c-comment">onde o Claude Code esta instalado (escopo global)</span>
+└── <span class="c-path">meu-projeto/</span>        <span class="c-comment">onde o AIOX esta instalado (escopo project)</span></code></pre>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:10px;"><i data-lucide="layers" class="lucide-sm" style="color:var(--accent3)"></i> Os dois escopos principais</div>
+        <table>
+          <thead>
+            <tr><th>Escopo</th><th>Flag</th><th>Arquivo</th><th>Disponivel em</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong style="color:var(--accent2)">user (global)</strong></td><td><span class="ic">--scope user</span></td><td><span class="ic">~/.claude.json</span></td><td>Todos os projetos</td></tr>
+            <tr><td><strong style="color:var(--accent3)">project</strong></td><td><span class="ic">--scope project</span></td><td><span class="ic">.mcp.json</span> na raiz do projeto</td><td>So aquele projeto</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box info">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Regra de carregamento:</strong> ao iniciar o Claude Code dentro de <span class="ic">meu-projeto</span>, ele carrega primeiro o global (<span class="ic">~/.claude.json</span>) e depois o project (<span class="ic">.mcp.json</span>). Tudo que esta no global fica disponivel automaticamente — sem nenhuma configuracao extra no projeto.
+        </div>
+      </div>
+
+      <!-- COMO INSTALAR OS MCPs -->
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 32px 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="download" class="lucide-md" style="color:var(--accent2)"></i> Como instalar os MCPs
+      </h3>
+
+      <div class="info-box critical" style="margin-bottom:16px;">
+        <i data-lucide="alert-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Cada CLI tem seu proprio sistema de configuracao de MCPs.</strong>
+          Os comandos de instalacao <strong>nao sao intercambiaveis</strong> entre Claude Code, Gemini CLI e Codex CLI. Escolha a aba correspondente ao CLI que voce esta usando.
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(this, 'mcp-claude')">Claude Code</button>
+          <button class="tab-btn" onclick="switchTab(this, 'mcp-gemini')">Gemini CLI</button>
+          <button class="tab-btn" onclick="switchTab(this, 'mcp-codex')">Codex CLI</button>
+        </div>
+        <div class="tab-content">
+
+          <!-- CLAUDE CODE -->
+          <div class="tab-panel active" id="mcp-claude">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">Usa <span class="ic">claude mcp add --scope user</span> -> salva em <span class="ic">~/.claude.json</span>. Disponivel globalmente em qualquer projeto:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Claude Code</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># context7 — documentacao de bibliotecas para LLMs</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> context7 <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @upstash/context7-mcp
+
+<span class="c-comment"># desktop-commander — gerenciamento de arquivos e terminal</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> desktop-commander <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @wonderwhy-er/desktop-commander
+
+<span class="c-comment"># playwright — automacao de browser para testes</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
+
+<span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai — free tier disponivel)</span>
+
+<span class="c-comment"># Passo 1: abrir o .zshrc</span>
+<span class="c-cmd">nano</span> ~/.zshrc
+<span class="c-comment"># Adicionar no final do arquivo:</span>
+<span class="c-cmd">export</span> <span class="c-string">EXA_API_KEY=sua_chave_aqui</span>
+<span class="c-comment"># Salvar: Ctrl+O -> Enter -> Ctrl+X</span>
+
+<span class="c-comment"># Passo 2: ativar</span>
+<span class="c-cmd">source</span> ~/.zshrc
+
+<span class="c-comment"># Passo 3: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--scope user</span> exa <span class="c-flag">-e</span> <span class="c-string">EXA_API_KEY=$EXA_API_KEY</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="key" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Como obter sua chave:</strong> crie uma conta em <a href="https://exa.ai" target="_blank" style="color:inherit; text-decoration:underline;">exa.ai</a> (free tier: 1.000 buscas/mes). A chave fica salva no <span class="ic">.zshrc</span> localmente — nunca e exposta no chat ou commitada no repositorio.
+              </div>
+            </div>
+
+            <!-- VERCEL MCP -->
+            <h4 style="font-size:14px; font-weight:700; color:var(--text); margin: 24px 0 4px; display:flex; align-items:center; gap:8px;">
+              <i data-lucide="triangle" class="lucide-sm" style="color:var(--accent2)"></i> Vercel MCP — MCP remoto (OAuth)
+            </h4>
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">
+              O Vercel MCP usa <strong style="color:var(--text)">OAuth</strong> — nao precisa gerar token manualmente. O login e feito uma unica vez pelo browser usando sua conta Vercel.
+            </p>
+
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Vercel MCP (Claude Code)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># vercel — gerenciamento de deployments, logs e projetos (requer autenticacao OAuth)</span>
+
+<span class="c-comment"># Passo 1: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add</span> <span class="c-flag">--transport http</span> vercel https://mcp.vercel.com <span class="c-flag">--scope user</span>
+
+<span class="c-comment"># Passo 2: abrir uma sessao do Claude Code</span>
+<span class="c-cmd">claude</span>
+
+<span class="c-comment"># Passo 3: autenticar com sua conta Vercel</span>
+<span class="c-cmd">/mcp</span>
+<span class="c-comment"># Vai abrir o browser — faca login com sua conta Vercel e autorize o acesso</span>
+<span class="c-comment"># Apos autorizar, feche o browser e volte ao terminal</span></code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="info" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                Com o Vercel MCP configurado voce consegue via prompt: ver status de deployments, analisar logs de erro, gerenciar projetos e dominios.
+              </div>
+            </div>
+
+            <div class="info-box tip" style="margin-bottom:16px;">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Teste rapido:</strong> abra uma sessao com <span class="ic">claude</span> e peca: <em>"Liste meus projetos na Vercel"</em>. Se retornar os dados, esta configurado corretamente.
+              </div>
+            </div>
+
+            <!-- GITHUB MCP -->
+            <h4 style="font-size:14px; font-weight:700; color:var(--text); margin: 24px 0 4px; display:flex; align-items:center; gap:8px;">
+              <i data-lucide="github" class="lucide-sm" style="color:var(--accent3)"></i> GitHub MCP — MCP remoto
+            </h4>
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">
+              Diferente dos outros MCPs, o GitHub MCP e um <strong style="color:var(--text)">MCP remoto</strong> — conecta via HTTP diretamente ao servidor do GitHub, sem instalar nada localmente. Requer um Personal Access Token (PAT).
+            </p>
+
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — GitHub MCP (Claude Code)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># github — gerenciamento de repositorios, issues e PRs (requer Personal Access Token)</span>
+
+<span class="c-comment"># Passo 1: abrir o .zshrc</span>
+<span class="c-cmd">nano</span> ~/.zshrc
+<span class="c-comment"># Adicionar no final do arquivo:</span>
+<span class="c-cmd">export</span> <span class="c-string">GITHUB_PAT=seu_token_aqui</span>
+<span class="c-comment"># Salvar: Ctrl+O -> Enter -> Ctrl+X</span>
+
+<span class="c-comment"># Passo 2: ativar</span>
+<span class="c-cmd">source</span> ~/.zshrc
+
+<span class="c-comment"># Passo 3: adicionar o MCP</span>
+<span class="c-cmd">claude mcp add-json</span> github <span class="c-string">"{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp\",\"headers\":{\"Authorization\":\"Bearer $GITHUB_PAT\"}}"</span> <span class="c-flag">--scope user</span></code></pre>
+            </div>
+
+            <div class="info-box info" style="margin-bottom:12px;">
+              <i data-lucide="key" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Como gerar seu token:</strong> <span class="ic">github.com</span> -> Settings -> Developer settings -> Personal access tokens -> Tokens (classic). Marque as permissoes: <span class="ic">repo</span>, <span class="ic">read:org</span> e <span class="ic">workflow</span>. O token fica salvo localmente — nunca e exposto no chat ou commitado no repositorio.
+              </div>
+            </div>
+
+            <div class="info-box warn" style="margin-bottom:12px;">
+              <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Nota tecnica:</strong> o GitHub MCP e um MCP remoto — conecta via HTTP diretamente ao servidor do GitHub, sem instalar nada localmente. O pacote <span class="ic">@modelcontextprotocol/server-github</span> foi depreciado em abril de 2025 e <strong>nao deve ser usado</strong>.
+              </div>
+            </div>
+
+            <div class="info-box tip" style="margin-bottom:16px;">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Teste rapido:</strong> abra uma sessao do Claude Code com <span class="ic">claude</span> e peca: <em>"Liste meus repositorios do GitHub"</em>. Se retornar a lista dos seus repos, esta configurado corretamente. Se der erro de autenticacao, o token esta errado ou expirado.
+              </div>
+            </div>
+
+            <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Verificar MCPs instalados</h4>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">claude mcp list</span>              <span class="c-comment"># listar todos os MCPs</span>
+<span class="c-cmd">claude mcp get</span> context7     <span class="c-comment"># detalhes de um MCP especifico</span>
+<span class="c-cmd">claude mcp get</span> github       <span class="c-comment"># verificar configuracao do GitHub MCP</span>
+<span class="c-cmd">claude mcp get</span> vercel       <span class="c-comment"># verificar configuracao do Vercel MCP</span></code></pre>
+            </div>
+          </div>
+
+          <!-- GEMINI CLI -->
+          <div class="tab-panel" id="mcp-gemini">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Gemini CLI usa um arquivo de configuracao proprio (<span class="ic">settings.json</span>) e <strong style="color:var(--text);">nao tem comando <span class="ic">mcp add</span></strong> — voce edita o JSON manualmente:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">~/.gemini/settings.json</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code>{
+  <span class="c-string">"mcpServers"</span>: {
+    <span class="c-string">"context7"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@upstash/context7-mcp"</span>]
+    },
+    <span class="c-string">"desktop-commander"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@wonderwhy-er/desktop-commander"</span>]
+    },
+    <span class="c-string">"playwright"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"@playwright/mcp"</span>]
+    },
+    <span class="c-string">"exa"</span>: {
+      <span class="c-string">"command"</span>: <span class="c-string">"npx"</span>,
+      <span class="c-string">"args"</span>: [<span class="c-string">"-y"</span>, <span class="c-string">"exa-mcp"</span>],
+      <span class="c-string">"env"</span>: { <span class="c-string">"EXA_API_KEY"</span>: <span class="c-string">"sua-chave-aqui"</span> }
+    }
+  }
+}</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Crie o diretorio se nao existir:</strong> <span class="ic">mkdir -p ~/.gemini</span> e depois crie o arquivo <span class="ic">settings.json</span> com o conteudo acima.
+              </div>
+            </div>
+          </div>
+
+          <!-- CODEX CLI -->
+          <div class="tab-panel" id="mcp-codex">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Codex CLI tem sua propria sintaxe de comando — similar ao Claude Code mas com <span class="ic">codex mcp add</span>:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Codex CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># context7 — documentacao de bibliotecas para LLMs</span>
+<span class="c-cmd">codex mcp add</span> context7 <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @upstash/context7-mcp
+
+<span class="c-comment"># desktop-commander — gerenciamento de arquivos e terminal</span>
+<span class="c-cmd">codex mcp add</span> desktop-commander <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @wonderwhy-er/desktop-commander
+
+<span class="c-comment"># playwright — automacao de browser para testes</span>
+<span class="c-cmd">codex mcp add</span> playwright <span class="c-flag">--</span> npx <span class="c-flag">-y</span> @playwright/mcp
+
+<span class="c-comment"># exa — busca web com IA (requer chave API de exa.ai)</span>
+<span class="c-cmd">codex mcp add</span> exa <span class="c-flag">--env</span> <span class="c-string">EXA_API_KEY=sua-chave-aqui</span> <span class="c-flag">--</span> npx <span class="c-flag">-y</span> exa-mcp</code></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="info-box warn" style="margin-top:16px;">
+        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Nunca cole tokens ou chaves diretamente nos comandos.</strong> Use variaveis de ambiente no <span class="ic">.zshrc</span> (como nos exemplos de Exa e GitHub acima). As chaves ficam salvas localmente — nunca sao expostas no chat ou commitadas no repositorio.
+        </div>
+      </div>
+
+      <!-- CONSUMO DE TOKENS -->
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 32px 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="cpu" class="lucide-md" style="color:var(--yellow)"></i> Consumo de tokens e contexto
+      </h3>
+      <p style="font-size:13px; color:var(--text2); margin-bottom:16px; line-height:1.7;">
+        Cada MCP carregado injeta as definicoes dos seus tools no contexto da sessao — isso <strong style="color:var(--text)">consome tokens</strong>. Quanto mais MCPs ativos, mais contexto ocupado antes mesmo de voce digitar qualquer coisa.
+      </p>
+
+      <div class="card" style="border-color:rgba(16,185,129,0.2); background:linear-gradient(135deg, rgba(16,185,129,0.03) 0%, rgba(16,185,129,0.01) 100%);">
+        <div class="card-title" style="margin-bottom:10px;"><i data-lucide="search" class="lucide-sm" style="color:var(--green)"></i> Tool Search — otimizacao automatica</div>
+        <p style="font-size:13px; color:var(--text2); line-height:1.7; margin-bottom:12px;">
+          O Claude Code tem um recurso chamado <strong style="color:var(--text)">Tool Search</strong> que resolve isso automaticamente: em vez de carregar todos os tools de todos os MCPs de uma vez, ele carrega apenas os tools relevantes para cada tarefa.
+        </p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px; padding:12px; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.15); border-radius:8px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--red);">~72k</div>
+            <div style="font-size:11px; color:var(--text3);">tokens sem Tool Search</div>
+          </div>
+          <div style="flex:1; min-width:140px; padding:12px; background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.15); border-radius:8px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--green);">~8.7k</div>
+            <div style="font-size:11px; color:var(--text3);">tokens com Tool Search</div>
+          </div>
+          <div style="flex:1; min-width:140px; padding:12px; background:rgba(209,255,0,0.06); border:1px solid rgba(209,255,0,0.15); border-radius:8px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--accent2);">-85%</div>
+            <div style="font-size:11px; color:var(--text3);">reducao automatica</div>
+          </div>
+        </div>
+        <p style="font-size:12px; color:var(--text3); margin-top:12px;">Ativa sozinho quando os tools ocupam mais de 10% do contexto.</p>
+      </div>
+
+      <div class="info-box tip" style="margin-top:12px;">
+        <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Conclusao pratica:</strong> instale os MCPs que voce realmente usa. O Tool Search cuida do resto.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 10 — CODERABBIT PLUGIN -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-coderabbit">
+      <div class="section-header">
+        <div class="section-num green">10</div>
+        <div class="section-title-group">
+          <h2 class="section-title">CodeRabbit — Plugin de Code Review <span class="tag tag-new">Destaque</span></h2>
+          <p class="section-desc">Plugin de revisao automatica de codigo com IA — integrado ao Claude Code</p>
+        </div>
+      </div>
+
+      <div class="info-box warn">
+        <i data-lucide="alert-triangle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <span style="white-space:nowrap;"><strong>CodeRabbit e um plugin do Claude Code, nao um MCP.</strong></span><br>Plugins adicionam slash commands (<span class="ic">/coderabbit:review</span>) diretamente no CLI — diferente dos MCPs que adicionam tools de backend.
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top:12px;">
+        <i data-lucide="book-open" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>O que e um PR (Pull Request)?</strong> E uma solicitacao para incluir suas alteracoes de codigo no repositorio principal do projeto. Funciona assim: voce trabalha numa copia separada (branch), e quando termina, abre um PR pedindo que as mudancas sejam revisadas e aprovadas antes de entrar no codigo principal. E onde o time (ou o CodeRabbit) revisa a qualidade do codigo.
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--text3); margin-bottom:16px;">Integrado na camada 2 dos Quality Gates do framework AIOX</p>
+
+      <div class="info-box critical">
+        <i data-lucide="layers" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>O CodeRabbit esta na Layer 2 dos Quality Gates do AIOX:</strong>
+          <div style="margin-top:6px; font-size:12px; opacity:0.85;">
+            Layer 1 (Local): pre-commit hooks, linting, type checking<br>
+            <strong>Layer 2 (CI/CD): testes automatizados + CodeRabbit review (aqui)</strong><br>
+            Layer 3 (Human): revisao de arquitetura, aprovacao final
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top:12px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Pre-requisito:</strong> o projeto precisa ser um repositorio Git (<span class="ic">git init</span> ou <span class="ic">git clone</span>). CodeRabbit nao funciona fora de repositorios Git.
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(209,255,0,0.2); margin-top:16px;">
+        <div class="card-title" style="margin-bottom:12px;"><i data-lucide="workflow" class="lucide-sm" style="color:var(--accent2)"></i> Duas formas complementares de uso</div>
+        <div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+          <div style="flex:1; min-width:220px;">
+            <div style="font-size:12px; font-weight:700; color:var(--accent3); margin-bottom:6px;">1. GitHub App (automatico nos PRs)</div>
+            <div style="font-size:12px; color:var(--text2); line-height:1.6;">Quando o <span class="ic">@devops</span> abre um PR, o CodeRabbit revisa automaticamente — sem nenhum comando.</div>
+          </div>
+          <div style="flex:1; min-width:220px;">
+            <div style="font-size:12px; font-weight:700; color:var(--accent2); margin-bottom:6px;">2. CLI + Plugin (loop local com Claude Code)</div>
+            <div style="font-size:12px; color:var(--text2); line-height:1.6;">O <span class="ic">@dev</span> implementa, revisa, corrige e so entrega quando o review estiver limpo.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Pre-requisito — dependencias do sistema</h3>
+
+      <div class="info-box tip">
+        <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>No Mac, as dependencias basicas ja estao disponiveis.</strong>
+          O <span class="ic">curl</span> e o <span class="ic">git</span> vem com o Xcode Command Line Tools. Se nao tiver instalado ainda:
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top:12px; margin-bottom:24px;">
+        <div class="code-header">
+          <span class="code-lang">bash — instalar Xcode Command Line Tools</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="c-cmd">xcode-select</span> <span class="c-flag">--install</span>  <span class="c-comment"># instala Xcode Command Line Tools se nao tiver</span></code></pre>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Instalacao — passos comuns (todas as CLIs)</h3>
+
+      <div class="info-box critical" style="margin-bottom:16px;">
+        <i data-lucide="alert-circle" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Cada CLI tem sua propria forma de integrar o CodeRabbit.</strong>
+          Os passos 1 e 2 (instalar CLI + autenticar) sao iguais para todos. O passo 3 (integracao com a CLI de IA) muda conforme o tool que voce usa.
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Instalar o CLI do CodeRabbit <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> https://cli.coderabbit.ai/install.sh | sh</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Autenticar <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">coderabbit auth login</span>
+<span class="c-comment"># Abre o browser para login com conta GitHub ou Google</span></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Conectar ao repositorio GitHub <span style="font-size:11px; color:var(--text3); font-weight:400;">(todas as CLIs)</span></div>
+            <div class="step-desc">Acesse <span class="ic">https://coderabbit.ai</span> -> login com GitHub -> autorize o repositorio. A partir dai, todo PR recebe review automatico.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 32px 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="plug" class="lucide-md" style="color:var(--accent2)"></i> Integracao por CLI
+      </h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:16px;">Cada CLI de IA integra o CodeRabbit de forma diferente. Escolha a aba correspondente:</p>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab(this, 'cr-claude')">Claude Code</button>
+          <button class="tab-btn" onclick="switchTab(this, 'cr-gemini')">Gemini CLI</button>
+          <button class="tab-btn" onclick="switchTab(this, 'cr-codex')">Codex CLI</button>
+        </div>
+        <div class="tab-content">
+
+          <!-- CLAUDE CODE -->
+          <div class="tab-panel active" id="cr-claude">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Claude Code usa o sistema de <strong style="color:var(--text);">plugins</strong> — o CodeRabbit e instalado como plugin nativo e adiciona slash commands diretamente no CLI:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — instalar plugin</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">claude plugin install</span> coderabbit
+<span class="c-comment"># Ou dentro do Claude Code:</span>
+<span class="c-comment"># /plugin install coderabbit</span></code></pre>
+            </div>
+            <h4 style="font-size:13px; font-weight:600; color:var(--text); margin: 16px 0 8px;">Comandos disponiveis apos instalacao</h4>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash — slash commands</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code>/coderabbit:review               <span class="c-comment"># revisa todas as mudancas</span>
+/coderabbit:review uncommitted   <span class="c-comment"># so mudancas nao commitadas</span>
+/coderabbit:review committed     <span class="c-comment"># so mudancas commitadas</span>
+/coderabbit:review --base main   <span class="c-comment"># compara com main</span></code></pre>
+            </div>
+          </div>
+
+          <!-- GEMINI CLI -->
+          <div class="tab-panel" id="cr-gemini">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Gemini CLI <strong style="color:var(--text);">nao tem sistema de plugins</strong>. O CodeRabbit e usado como ferramenta CLI independente — voce roda os comandos diretamente no terminal:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — uso direto do CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Revisar mudancas nao commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--uncommitted</span>
+
+<span class="c-comment"># Revisar mudancas commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--committed</span>
+
+<span class="c-comment"># Comparar com branch main</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--base</span> main</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Dica:</strong> voce pode pedir ao Gemini CLI para rodar o comando <span class="ic">coderabbit review</span> em linguagem natural. Ele executa como qualquer outro comando de terminal.
+              </div>
+            </div>
+          </div>
+
+          <!-- CODEX CLI -->
+          <div class="tab-panel" id="cr-codex">
+            <p style="font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.6;">O Codex CLI tambem <strong style="color:var(--text);">nao tem sistema de plugins</strong>. Use o CodeRabbit como CLI independente no terminal:</p>
+            <div class="code-block" style="margin-bottom:12px;">
+              <div class="code-header">
+                <span class="code-lang">bash — uso direto do CLI</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Revisar mudancas nao commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--uncommitted</span>
+
+<span class="c-comment"># Revisar mudancas commitadas</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--committed</span>
+
+<span class="c-comment"># Comparar com branch main</span>
+<span class="c-cmd">coderabbit review</span> <span class="c-flag">--base</span> main</code></pre>
+            </div>
+            <div class="info-box tip">
+              <i data-lucide="lightbulb" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Dica:</strong> peca ao Codex para executar <span class="ic">coderabbit review</span> — ele roda o comando no terminal integrado.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 16px;">
+        <i data-lucide="gift" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>Plano gratuito:</strong> o plugin funciona completamente no tier gratuito. Repositorios open source tem CodeRabbit sempre gratuito.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 11 — EDITORES DE CODIGO -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-editors">
+      <div class="section-header">
+        <div class="section-num cyan">11</div>
+        <div class="section-title-group">
+          <h2 class="section-title">IDE Editores de Codigo <span class="tag tag-opt">Opcional</span></h2>
+          <p class="section-desc">Configure seu editor com IA — compatibilidade e passo a passo de instalacao</p>
+        </div>
+      </div>
+
+      <!-- IDE EXPLAINER CARD -->
+      <div class="card" style="border-color:rgba(209,255,0,0.2); background: linear-gradient(135deg, rgba(209,255,0,0.03) 0%, rgba(209,255,0,0.01) 100%); margin-bottom: 16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(209,255,0,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="layout-dashboard" class="lucide-md" style="color:var(--accent2)"></i>
+          </div>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:var(--text);">O que e uma IDE?</div>
+            <div style="font-size:11px; color:var(--text3);">Integrated Development Environment — Ambiente de Desenvolvimento Integrado</div>
+          </div>
+        </div>
+
+        <p style="font-size:13px; color:var(--text2); margin-bottom:16px; line-height:1.7;">
+          E um programa que reune <strong style="color:var(--text)">tudo que um desenvolvedor precisa em um so lugar</strong>: editor de texto, terminal, debug, controle de versao (Git) e — nos IDEs modernos — IA integrada.
+        </p>
+
+        <div style="display:flex; gap:10px; align-items:flex-start; padding:12px 14px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px;">
+          <i data-lucide="lightbulb" class="lucide-sm" style="color:var(--yellow); margin-top:2px; flex-shrink:0;"></i>
+          <div style="font-size:12px; color:var(--text2); line-height:1.7;">
+            <strong style="color:var(--text);">Como IDE e CLI se complementam no AIOX:</strong><br>
+            Voce usa a <span style="color:var(--accent3);">IDE</span> para <em>visualizar e editar</em> o codigo — e o <span style="color:var(--accent2);">Claude Code na CLI</span> (terminal integrado da propria IDE) para <em>orquestrar agentes, rodar stories e fazer deploys</em>.<br>
+            <span style="color:var(--text3);">O fluxo e: IDE aberta -> terminal integrado -> <span class="ic">claude</span> -> agentes AIOX em acao.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <i data-lucide="apple" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>No Mac, todos os editores rodam nativamente.</strong>
+          Basta baixar, instalar e abrir. O terminal integrado de cada editor ja usa o shell padrao do macOS (zsh).
+        </div>
+      </div>
+
+      <div class="info-box info" style="margin-top:12px;">
+        <i data-lucide="info" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>O AIOX roda no terminal, nao no editor.</strong>
+          Editores com IA funcionam como complemento — a execucao de agentes, stories e workflows acontece sempre na CLI. Use o editor para edicao e a CLI para orquestracao.
+        </div>
+      </div>
+
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <!-- ANTIGRAVITY -->
+      <h3 style="font-size:16px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="zap" class="lucide-md" style="color:var(--accent2)"></i> AntiGravity <span style="background:rgba(66,133,244,0.15); color:#4285f4; border:1px solid rgba(66,133,244,0.3); font-size:10px; padding:2px 7px; border-radius:20px; font-weight:600; white-space:nowrap;">by Google</span> <span class="tag tag-new">Recomendado pelo AIOX</span>
+      </h3>
+      <p style="font-size:12px; color:var(--text3); margin-bottom:16px;">IDE agentica do Google — 16 agentes especializados, MCP Store integrada e suporte a multiplos modelos (Gemini, Claude, GPT). Gratuita na preview publica.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Baixar e instalar o AntiGravity</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 0;">Acesse <a href="https://antigravity.google/download" target="_blank" style="color:var(--accent3); text-decoration:underline;">antigravity.google/download</a> e execute o instalador. Disponivel para macOS (Intel e Apple Silicon). Autenticacao com conta Google.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Configurar MCP no AntiGravity</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">O AntiGravity tem sua propria configuracao de MCP — separada do Claude Code.</p>
+            <div class="info-box info" style="margin-top: 0;">
+              <i data-lucide="info" class="lucide-md info-icon"></i>
+              <div class="info-text">
+                <strong>Caminho na UI:</strong> <span class="ic">Agent session -> menu "..." -> MCP Servers -> Manage MCP Servers</span><br>
+                Arquivo de config: <span class="ic">~/.gemini/antigravity/mcp_config.json</span><br>
+                Tambem possui uma <strong>MCP Store</strong> integrada para buscar e instalar servidores diretamente.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Verificar o AGENTS.md no projeto</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">O AntiGravity le o <span class="ic">AGENTS.md</span> e o <span class="ic">GEMINI.md</span> na raiz do projeto — ambos ja gerados pelo AIOX.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <!-- VS CODE -->
+      <h3 style="font-size:15px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="code-2" class="lucide-md" style="color:#007acc"></i> VS Code
+      </h3>
+      <p style="font-size:12px; color:var(--text3); margin-bottom:12px;">O editor mais popular — suporte ao AIOX via extensao Claude Code oficial da Anthropic</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Baixar o VS Code</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">Acesse <a href="https://code.visualstudio.com" target="_blank" style="color:var(--accent3); text-decoration:underline;">code.visualstudio.com</a> e baixe a versao para macOS (Universal ou Apple Silicon).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Instalar a extensao Claude Code</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 0;">No VS Code, abra o painel de extensoes (<span class="ic">Cmd+Shift+X</span>), busque por <strong>Claude Code</strong> (publicador: Anthropic) e clique em <strong>Install</strong>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Abrir o terminal integrado e rodar o AIOX</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash — Terminal integrado (Ctrl+` ou Cmd+`)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">claude</span>  <span class="c-comment"># inicia o Claude Code com acesso ao projeto aberto</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <!-- CURSOR -->
+      <h3 style="font-size:15px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="mouse-pointer-2" class="lucide-md" style="color:#9b72f5"></i> Cursor
+      </h3>
+      <p style="font-size:12px; color:var(--text3); margin-bottom:12px;">Fork do VS Code com IA embutida — autocompletar avancado e chat contextual com seu codigo</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Baixar o Cursor</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">Acesse <a href="https://cursor.com" target="_blank" style="color:var(--accent3); text-decoration:underline;">cursor.com</a>, clique em <strong>Download</strong> e arraste para a pasta Applications.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Adicionar regras AIOX no Cursor</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">O Cursor usa <span class="ic">.cursor/rules/</span> em vez de <span class="ic">CLAUDE.md</span>. Copie o conteudo para uma rule do Cursor:</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">mkdir</span> <span class="c-flag">-p</span> .cursor/rules
+<span class="c-cmd">cp</span> .claude/CLAUDE.md .cursor/rules/aiox.mdc</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <!-- WINDSURF -->
+      <h3 style="font-size:15px; font-weight:700; color:var(--text); margin: 0 0 4px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="wind" class="lucide-md" style="color:#0ea5e9"></i> Windsurf <span style="background:rgba(14,165,233,0.15); color:#0ea5e9; border:1px solid rgba(14,165,233,0.3); font-size:10px; padding:2px 7px; border-radius:20px; font-weight:600; white-space:nowrap;">by Codeium</span>
+      </h3>
+      <p style="font-size:12px; color:var(--text3); margin-bottom:12px;">Editor com agente de IA "Cascade" embutido — experiencia agentic sem CLI adicional</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Baixar o Windsurf</div>
+            <p style="font-size:13px; color:var(--text2); margin: 6px 0 8px;">Acesse <a href="https://codeium.com/windsurf" target="_blank" style="color:var(--accent3); text-decoration:underline;">codeium.com/windsurf</a> e baixe o instalador para macOS.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Adicionar contexto AIOX via .windsurfrules</div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Gerar .windsurfrules com contexto AIOX</span>
+<span class="c-cmd">cp</span> .claude/CLAUDE.md .windsurfrules</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 12 — FIRST RUN -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-first-run">
+      <div class="section-header">
+        <div class="section-num green">12</div>
+        <div class="section-title-group">
+          <h2 class="section-title">Primeiro Uso</h2>
+          <p class="section-desc">Definicao de first-value: ativacao + greeting + comando em <= 10 min</p>
+        </div>
+      </div>
+
+      <div class="info-box critical">
+        <i data-lucide="target" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          <strong>First-value (binario):</strong>
+          Ativacao de agente + greeting valido + comando inicial com output util em menos de 10 minutos.
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Abra seu CLI no projeto com AIOX instalado</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">cd</span> <span class="c-path">meu-projeto</span>
+<span class="c-cmd">claude</span>  <span class="c-comment"># ou: codex / gemini</span></code></pre>
+            </div>
+            <div style="margin-top:10px; font-size:12px; color:var(--text3); padding: 8px 12px; background: rgba(16,185,129,0.05); border-left: 2px solid var(--green); border-radius: 0 6px 6px 0;">
+              Percebeu? Nenhum <span class="ic">npx</span> aqui. O AIOX ja esta instalado no projeto — basta abrir o CLI e ativar os agentes.
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Ative um agente</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># No Claude Code:</span>
+@aiox-master
+
+<span class="c-comment"># No Gemini CLI:</span>
+/aiox-menu  <span class="c-comment"># depois selecione o agente</span>
+
+<span class="c-comment"># No Codex CLI:</span>
+/skills  <span class="c-comment"># depois selecione aiox-&lt;agent-id&gt;</span></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Confirme o greeting e rode o primeiro comando</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Apos o greeting do agente, teste:</span>
+*help  <span class="c-comment"># lista todos os comandos disponiveis</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 24px 0 12px;">Ativacao por CLI</h3>
+      <div class="card">
+        <table class="activation-table">
+          <thead>
+            <tr><th>CLI</th><th>Paridade AIOX</th><th>Ativacao de agente</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>Completa (referencia)</td><td>@agent-name</td></tr>
+            <tr><td>Gemini CLI</td><td>Alta</td><td>/aiox-menu -> /aiox-&lt;agent&gt;</td></tr>
+            <tr><td>Codex CLI</td><td>Parcial</td><td>/skills -> aiox-&lt;agent-id&gt;</td></tr>
+            <tr><td>Cursor</td><td>Sem lifecycle hooks</td><td>Regras + MCP</td></tr>
+            <tr><td>AntiGravity</td><td>Workflow-based</td><td>Workflows (nao hooks)</td></tr>
+            <tr><td>GitHub Copilot</td><td>Sem lifecycle hooks</td><td>Instrucoes de repositorio + MCP</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--text); margin: 20px 0 12px;">Agentes principais disponiveis</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i data-lucide="wand-2" class="lucide-sm" style="color:var(--accent2)"></i> @aiox-master</div>
+          <div style="font-size:12px; color:var(--text2);">Executor universal do AIOX. Use para qualquer tarefa que nao requer persona especifica.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="code-2" class="lucide-sm" style="color:var(--accent3)"></i> @dev</div>
+          <div style="font-size:12px; color:var(--text2);">Desenvolvedor full stack. Implementa stories com contexto arquitetural.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="building" class="lucide-sm" style="color:var(--yellow)"></i> @architect</div>
+          <div style="font-size:12px; color:var(--text2);">Arquiteto de sistemas. Cria PRDs, documentos de arquitetura e decisoes tecnicas.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="flask-conical" class="lucide-sm" style="color:var(--green)"></i> @qa</div>
+          <div style="font-size:12px; color:var(--text2);">Quality Assurance. Valida implementacoes e cria estrategias de teste.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="clipboard-list" class="lucide-sm" style="color:var(--accent3)"></i> @pm</div>
+          <div style="font-size:12px; color:var(--text2);">Product Manager. Criacao de PRDs e definicao de features.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="repeat-2" class="lucide-sm" style="color:var(--accent2)"></i> @sm</div>
+          <div style="font-size:12px; color:var(--text2);">Scrum Master. Transforma PRDs em stories hiperdetalhadas para o @dev.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TROUBLESHOOTING -->
+    <!-- ======================================================== -->
+    <section class="section" id="sec-troubleshooting">
+      <div class="section-header">
+        <div class="section-num yellow"><i data-lucide="alert-circle" class="lucide-sm"></i></div>
+        <div class="section-title-group">
+          <h2 class="section-title">Troubleshooting</h2>
+          <p class="section-desc">Problemas comuns no macOS e solucoes</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Erro de permissao no npm install global</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-comment"># Configure npm para instalar sem sudo</span>
+<span class="c-cmd">mkdir</span> <span class="c-path">~/.npm-global</span>
+<span class="c-cmd">npm config set prefix</span> <span class="c-string">'~/.npm-global'</span>
+<span class="c-cmd">echo</span> <span class="c-string">'export PATH=~/.npm-global/bin:$PATH'</span> >> ~/.zshrc
+<span class="c-cmd">source</span> ~/.zshrc</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Xcode Command Line Tools nao instalado</div>
+            <div class="step-desc">Se ao rodar <span class="ic">git</span> ou <span class="ic">curl</span> aparecer erro sobre ferramentas de desenvolvimento ausentes, rode:</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">xcode-select</span> <span class="c-flag">--install</span></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title"><span class="ic">npx aiox-core</span> nao encontrado</div>
+            <div class="step-desc">Verifique se Node.js >= 18 esta instalado: <span class="ic">node --version</span>. Se Node.js estiver instalado, tente <span class="ic">npx aiox-core@latest init</span> para buscar a versao mais recente.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Agente nao responde ao <span class="ic">@agent-name</span></div>
+            <div class="step-desc">Confirme que o AIOX foi instalado no projeto atual. O <span class="ic">.aiox-core/</span> deve existir na raiz do projeto onde voce abriu o Claude Code.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Claude Code nao reconhece AIOX apos instalacao</div>
+            <div class="step-desc">Feche e reabra o Claude Code na pasta do projeto. O AIOX e carregado quando o CLI e iniciado no diretorio correto.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:var(--red);"><i data-lucide="x-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Homebrew nao encontrado apos instalacao (Apple Silicon)</div>
+            <div class="step-desc">Em Macs com Apple Silicon (M1/M2/M3/M4), o Homebrew instala em <span class="ic">/opt/homebrew</span>. Adicione ao PATH:</div>
+            <div class="code-block" style="margin-top:8px;">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <pre><code><span class="c-cmd">echo</span> <span class="c-string">'eval "$(/opt/homebrew/bin/brew shellenv)"'</span> >> ~/.zshrc
+<span class="c-cmd">source</span> ~/.zshrc</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.25);color:var(--yellow);"><i data-lucide="help-circle" class="lucide-sm"></i></div>
+          <div class="step-content">
+            <div class="step-title">Preciso rodar <span class="ic">npx</span> toda vez que abrir o projeto?</div>
+            <div class="step-desc">Nao. O <span class="ic">npx</span> e usado apenas para instalar ou atualizar o AIOX. No dia a dia, voce abre o CLI (<span class="ic">claude</span>, <span class="ic">codex</span> ou <span class="ic">gemini</span>) dentro do projeto e usa os agentes diretamente com <span class="ic">@agent-name</span>. O framework ja esta instalado localmente na pasta <span class="ic">.aiox-core/</span>.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box tip" style="margin-top: 16px;">
+        <i data-lucide="bug" class="lucide-md info-icon"></i>
+        <div class="info-text">
+          Problemas nao listados aqui? Abra uma issue em <a href="https://github.com/SynkraAI/aiox-core/issues" target="_blank" style="color:inherit;text-decoration:underline;">github.com/SynkraAI/aiox-core/issues</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <div class="footer">
+      <div class="footer-title" style="display:flex;align-items:center;justify-content:center;gap:8px;"><i data-lucide="rocket" class="lucide-md"></i> AIOX instalado com sucesso?</div>
+      <div class="footer-text">Ative o <span class="ic">@aiox-master</span> e rode <span class="ic">*help</span> para ver tudo que esta disponivel.</div>
+      <div class="footer-actions">
+        <a href="https://github.com/SynkraAI/aiox-core" target="_blank" class="btn-lg purple"><i data-lucide="github" class="lucide-sm"></i> GitHub AIOX Core</a>
+        <a href="https://github.com/SynkraAI/mcp-ecosystem" target="_blank" class="btn-lg ghost"><i data-lucide="wrench" class="lucide-sm"></i> MCP Ecosystem</a>
+        <a href="https://github.com/SynkraAI" target="_blank" class="btn-lg ghost"><i data-lucide="globe" class="lucide-sm"></i> SynkraAI Org</a>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+  // TABS
+  function switchTab(btn, panelId) {
+    const tabContent = btn.closest('.tabs').querySelector('.tab-content');
+    const tabNav = btn.closest('.tab-nav');
+
+    tabNav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    tabContent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  // COPY — single block (header button copies all)
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copiar tudo';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copiar tudo';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // COPY — per-line command copy
+  function copyCmd(btn) {
+    const line = btn.closest('.cmd-line');
+    const text = line.querySelector('.cmd-text').innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copiar';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // AUTO-TRANSFORM: split code blocks into per-line copyable commands
+  (function initPerLineCopy() {
+    document.querySelectorAll('.code-block pre code').forEach(code => {
+      const block = code.closest('.code-block');
+      // Skip JSON blocks, structure/config blocks, single-line blocks
+      const lang = block.querySelector('.code-lang');
+      const langText = lang ? lang.textContent.toLowerCase() : '';
+      if (langText.includes('json') || langText.includes('estrutura') || langText.includes('yaml')) return;
+
+      const html = code.innerHTML;
+      const lines = html.split('\n');
+
+      // Only transform blocks with multiple command lines
+      const cmdCount = lines.filter(l => {
+        const text = l.replace(/<[^>]*>/g, '').trim();
+        return text && !text.startsWith('#');
+      }).length;
+      if (cmdCount < 2) return;
+
+      let newHtml = '';
+      lines.forEach(line => {
+        const plainText = line.replace(/<[^>]*>/g, '').trim();
+
+        if (!plainText) {
+          newHtml += '<div class="empty-line"></div>';
+        } else if (plainText.startsWith('#')) {
+          newHtml += '<div class="comment-line">' + line + '</div>';
+        } else {
+          newHtml += '<div class="cmd-line"><span class="cmd-text">' + line + '</span><button class="cmd-copy" onclick="copyCmd(this)">Copiar</button></div>';
+        }
+      });
+
+      code.innerHTML = newHtml;
+      code.style.padding = '8px 0';
+
+      // Rename header button to "Copiar tudo"
+      const headerBtn = block.querySelector('.copy-btn');
+      if (headerBtn) headerBtn.textContent = 'Copiar tudo';
+    });
+  })();
+
+  // SIDEBAR ACTIVE
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // SCROLL SPY
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = '#' + entry.target.id;
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // PROGRESS TRACKER — localStorage
+  const PROGRESS_KEY = 'aiox-install-mac-phases';
+  const progressSteps = document.querySelectorAll('.progress-step[data-step]');
+
+  function loadDone() {
+    try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveDone(done) {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(done));
+  }
+
+  function renderProgress(done) {
+    let firstPending = true;
+    progressSteps.forEach(step => {
+      const num = parseInt(step.dataset.step);
+      const isDone = done.includes(num);
+      const psNum = step.querySelector('.ps-num');
+      step.classList.remove('done', 'active');
+      if (isDone) {
+        step.classList.add('done');
+        psNum.innerHTML = '<i data-lucide="check" class="lucide-sm"></i>';
+        step.title = 'Clique para desmarcar';
+      } else {
+        psNum.textContent = num;
+        if (firstPending) {
+          step.classList.add('active');
+          firstPending = false;
+        }
+        step.title = 'Clique para marcar como concluida';
+      }
+    });
+    lucide.createIcons();
+  }
+
+  progressSteps.forEach(step => {
+    step.addEventListener('click', () => {
+      const num = parseInt(step.dataset.step);
+      let done = loadDone();
+      if (done.includes(num)) {
+        done = done.filter(n => n !== num);
+      } else {
+        done.push(num);
+        done.sort((a, b) => a - b);
+      }
+      saveDone(done);
+      renderProgress(done);
+    });
+  });
+
+  // LUCIDE ICONS + init progress
+  renderProgress(loadDone());
+</script>
+
+</body>
+</html>
